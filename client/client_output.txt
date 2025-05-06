@@ -1,0 +1,3964 @@
+File Tree:
+
+client/
+    .gitignore
+    client_output.txt
+    eslint.config.js
+    grok.py
+    index.html
+    package-lock.json
+    package.json
+    postcss.config.js
+    README.md
+    tailwind.config.js
+    vite.config.js
+public/
+    vite.svg
+src/
+    App.css
+    App.jsx
+    index.css
+    main.jsx
+    assets/
+        react.svg
+    components/
+        ReviewsDashboard.jsx
+
+Files Content:
+
+---
+File: .gitignore
+---
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+---
+File: client_output.txt
+---
+File Tree:
+
+client/
+    .gitignore
+    client_output.txt
+    eslint.config.js
+    grok.py
+    index.html
+    package-lock.json
+    package.json
+    postcss.config.js
+    README.md
+    tailwind.config.js
+    vite.config.js
+public/
+    vite.svg
+src/
+    App.css
+    App.jsx
+    index.css
+    main.jsx
+    assets/
+        react.svg
+    components/
+        ReviewsDashboard.jsx
+
+Files Content:
+
+---
+File: .gitignore
+---
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+---
+File: client_output.txt
+---
+File Tree:
+
+client/
+    .gitignore
+    client_output.txt
+    eslint.config.js
+    grok.py
+    index.html
+    package-lock.json
+    package.json
+    postcss.config.js
+    README.md
+    tailwind.config.js
+    vite.config.js
+public/
+    vite.svg
+src/
+    App.css
+    App.jsx
+    index.css
+    main.jsx
+    assets/
+        react.svg
+    components/
+        ReviewsDashboard.jsx
+
+Files Content:
+
+---
+File: .gitignore
+---
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+---
+File: client_output.txt
+---
+File Tree:
+
+server/
+    .env
+    grok.py
+    index.js
+    output.txt
+    package-lock.json
+    package.json
+config/
+    db.js
+logs/
+    analyze-failures.log
+    chatgpt-errors.log
+    system.log
+models/
+    response.js
+    review.js
+routes/
+    analyzeResponseRoute.js
+    responsesRoute.js
+    reviewsRoute.js
+services/
+    chatgptService.js
+tasks/
+    analyzeResponses.js
+    scheduler.js
+utils/
+    logger.js
+
+Files Content:
+
+---
+File: .env
+---
+// Environment variables
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASS=a1212333
+DB_NAME=hoteai_db
+OPENAI_API_KEY=***REMOVED***
+
+---
+File: grok.py
+---
+import os
+import argparse
+import tiktoken
+
+
+def generate_file_tree(root_dir):
+    tree = ""
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Exclude specified directories
+
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d
+            not in [
+                "node_modules",
+                ".next",
+                ".git",
+                ".venv",
+                ".vscode",
+                "__pycache__",
+                "blockchain_data",
+            ]
+        ]
+        # Calculate the relative path from root_dir to dirpath
+        relative_dir = os.path.relpath(dirpath, root_dir)
+        # Count the number of separators in the relative path to determine the level
+        level = 0 if relative_dir == "." else relative_dir.count(os.sep) + 1
+        indent = "    " * (level - 1)
+        dir_name = os.path.basename(dirpath)
+        tree += f"{indent}{dir_name}/\n"
+        for f in filenames:
+            tree += f"{indent}    {f}\n"
+    return tree
+
+
+def get_all_files(root_dir):
+    file_paths = []
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Exclude specified directories
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d
+            not in [
+                "node_modules",
+                ".next",
+                ".git",
+                "migrations",
+                "validations",
+                "package.json",
+                "logs",
+                "backups",
+                "public",
+            ]
+        ]
+        for f in filenames:
+            # Exclude specific file types
+            if f in [
+                "package-lock.json",
+                "yarn-error.log",
+                ".svg",
+                "package-lock.json",
+                "tsconfig.json",
+                ".prettierrc",
+                ".eslintrc.json",
+                "README.md",
+                "postcss.config.mjs",
+                "transactions_784017-784116.json",
+                "bitcoin_data.db",
+                "bitcoind.session.sql",
+                "cleanup.log",
+                ".python-version",
+                "bitcoinetl",
+                "README.txt",
+                "bitcoin_etl.log",
+                "blocks_784017-784116.json",
+            ]:
+                continue
+            full_path = os.path.join(dirpath, f)
+            file_paths.append(full_path)
+    return file_paths
+
+
+def read_files(file_paths, root_dir):
+    content = ""
+    MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB limit
+    for i, file_path in enumerate(file_paths):
+        relative_path = os.path.relpath(file_path, root_dir)
+        print(f"Reading file {i+1}/{len(file_paths)}: {relative_path}")
+        content += f"\n---\nFile: {relative_path}\n---\n"
+        try:
+            # Skip large files
+            if os.path.getsize(file_path) > MAX_FILE_SIZE:
+                content += "<File skipped: Too large>\n"
+                continue
+            with open(file_path, "r", encoding="utf-8") as file:
+                content += file.read()
+        except UnicodeDecodeError:
+            content += "<File skipped: Invalid UTF-8 encoding>\n"
+        except Exception as e:
+            content += f"<Could not read file: {e}>\n"
+    return content
+
+
+def count_tokens(text):
+    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    tokens = encoding.encode(text, disallowed_special=())  # Disable special token check
+    return len(tokens)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Prepare folder contents for LLM prompt."
+    )
+    parser.add_argument("directory", help="The root directory of your code files.")
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="The output TXT file to save the concatenated content. Defaults to 'backend.txt' or 'frontend.txt'.",
+        default=None,
+    )
+    args = parser.parse_args()
+
+    root_dir = os.path.abspath(args.directory)
+
+    # Set output filename based on the directory name (backend or frontend)
+    if args.output is None:
+        # Default to using directory name as output file
+        directory_name = os.path.basename(root_dir)
+        output_filename = f"{directory_name}.txt"
+    else:
+        output_filename = args.output
+
+    # Generate file tree
+    print("Generating file tree...")
+    file_tree = generate_file_tree(root_dir)
+
+    # Get all file paths
+    print("Collecting file paths...")
+    file_paths = get_all_files(root_dir)
+
+    # Read all files and get their content
+    print("Reading files...")
+    files_content = read_files(file_paths, root_dir)
+
+    # Combine file tree and files content
+    total_output = f"File Tree:\n\n{file_tree}\nFiles Content:\n{files_content}"
+
+    # Count tokens
+    print("Counting tokens...")
+    token_count = count_tokens(total_output)
+
+    # Save the concatenated content to a TXT file
+    print(f"Saving to {output_filename}...")
+    with open(output_filename, "w", encoding="utf-8") as output_file:
+        output_file.write(total_output)
+
+    # Print the total token count
+    print(f"Total Tokens: {token_count}")
+    print(f"All content has been saved to {output_filename}")
+
+
+if __name__ == "__main__":
+    main()
+
+---
+File: index.js
+---
+// server/index.js
+
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+
+const reviewsRoute = require('./routes/reviewsRoute');
+const responsesRoute = require('./routes/responsesRoute');
+const analyzeResponseRoute = require('./routes/analyzeResponseRoute');
+ //ניתוח ציוני איכות
+const { analyzeUnscoredResponses } = require('./tasks/analyzeResponses');
+
+analyzeUnscoredResponses();
+setInterval(() => {
+    console.log('🔄 Running scheduled response analysis...');
+    analyzeUnscoredResponses().catch(err =>
+        console.error('❌ Auto-analysis failed:', err)
+    );
+}, 10 * 60 * 1000);
+
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.use('/api/reviews', reviewsRoute);
+app.use('/api/responses', responsesRoute);
+app.use('/api/analyze-response', analyzeResponseRoute);
+
+// Health Check
+app.get('/', (req, res) => {
+    res.send('👋 Welcome to HoteAI server!');
+});
+
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
+
+---
+File: output.txt
+---
+File Tree:
+
+server/
+    .env
+    grok.py
+    index.js
+    output.txt
+    package-lock.json
+    package.json
+config/
+    db.js
+logs/
+    analyze-failures.log
+    chatgpt-errors.log
+    system.log
+models/
+    response.js
+    review.js
+routes/
+    analyzeResponseRoute.js
+    responsesRoute.js
+    reviewsRoute.js
+services/
+    chatgptService.js
+tasks/
+    analyzeResponses.js
+    scheduler.js
+utils/
+    logger.js
+
+Files Content:
+
+---
+File: .env
+---
+// Environment variables
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASS=a1212333
+DB_NAME=hoteai_db
+OPENAI_API_KEY=***REMOVED***
+
+---
+File: grok.py
+---
+import os
+import argparse
+import tiktoken
+
+
+def generate_file_tree(root_dir):
+    tree = ""
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Exclude specified directories
+
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d
+            not in [
+                "node_modules",
+                ".next",
+                ".git",
+                ".venv",
+                ".vscode",
+                "__pycache__",
+                "blockchain_data",
+            ]
+        ]
+        # Calculate the relative path from root_dir to dirpath
+        relative_dir = os.path.relpath(dirpath, root_dir)
+        # Count the number of separators in the relative path to determine the level
+        level = 0 if relative_dir == "." else relative_dir.count(os.sep) + 1
+        indent = "    " * (level - 1)
+        dir_name = os.path.basename(dirpath)
+        tree += f"{indent}{dir_name}/\n"
+        for f in filenames:
+            tree += f"{indent}    {f}\n"
+    return tree
+
+
+def get_all_files(root_dir):
+    file_paths = []
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Exclude specified directories
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d
+            not in [
+                "node_modules",
+                ".next",
+                ".git",
+                "migrations",
+                "validations",
+                "package.json",
+                "logs",
+                "backups",
+                "public",
+            ]
+        ]
+        for f in filenames:
+            # Exclude specific file types
+            if f in [
+                "package-lock.json",
+                "yarn-error.log",
+                ".svg",
+                "package-lock.json",
+                "tsconfig.json",
+                ".prettierrc",
+                ".eslintrc.json",
+                "README.md",
+                "postcss.config.mjs",
+                "transactions_784017-784116.json",
+                "bitcoin_data.db",
+                "bitcoind.session.sql",
+                "cleanup.log",
+                ".python-version",
+                "bitcoinetl",
+                "README.txt",
+                "bitcoin_etl.log",
+                "blocks_784017-784116.json",
+            ]:
+                continue
+            full_path = os.path.join(dirpath, f)
+            file_paths.append(full_path)
+    return file_paths
+
+
+def read_files(file_paths, root_dir):
+    content = ""
+    MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB limit
+    for i, file_path in enumerate(file_paths):
+        relative_path = os.path.relpath(file_path, root_dir)
+        print(f"Reading file {i+1}/{len(file_paths)}: {relative_path}")
+        content += f"\n---\nFile: {relative_path}\n---\n"
+        try:
+            # Skip large files
+            if os.path.getsize(file_path) > MAX_FILE_SIZE:
+                content += "<File skipped: Too large>\n"
+                continue
+            with open(file_path, "r", encoding="utf-8") as file:
+                content += file.read()
+        except UnicodeDecodeError:
+            content += "<File skipped: Invalid UTF-8 encoding>\n"
+        except Exception as e:
+            content += f"<Could not read file: {e}>\n"
+    return content
+
+
+def count_tokens(text):
+    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    tokens = encoding.encode(text, disallowed_special=())  # Disable special token check
+    return len(tokens)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Prepare folder contents for LLM prompt."
+    )
+    parser.add_argument("directory", help="The root directory of your code files.")
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="The output TXT file to save the concatenated content. Defaults to 'backend.txt' or 'frontend.txt'.",
+        default=None,
+    )
+    args = parser.parse_args()
+
+    root_dir = os.path.abspath(args.directory)
+
+    # Set output filename based on the directory name (backend or frontend)
+    if args.output is None:
+        # Default to using directory name as output file
+        directory_name = os.path.basename(root_dir)
+        output_filename = f"{directory_name}.txt"
+    else:
+        output_filename = args.output
+
+    # Generate file tree
+    print("Generating file tree...")
+    file_tree = generate_file_tree(root_dir)
+
+    # Get all file paths
+    print("Collecting file paths...")
+    file_paths = get_all_files(root_dir)
+
+    # Read all files and get their content
+    print("Reading files...")
+    files_content = read_files(file_paths, root_dir)
+
+    # Combine file tree and files content
+    total_output = f"File Tree:\n\n{file_tree}\nFiles Content:\n{files_content}"
+
+    # Count tokens
+    print("Counting tokens...")
+    token_count = count_tokens(total_output)
+
+    # Save the concatenated content to a TXT file
+    print(f"Saving to {output_filename}...")
+    with open(output_filename, "w", encoding="utf-8") as output_file:
+        output_file.write(total_output)
+
+    # Print the total token count
+    print(f"Total Tokens: {token_count}")
+    print(f"All content has been saved to {output_filename}")
+
+
+if __name__ == "__main__":
+    main()
+
+---
+File: index.js
+---
+// server/index.js
+
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+
+const reviewsRoute = require('./routes/reviewsRoute');
+const responsesRoute = require('./routes/responsesRoute');
+const analyzeResponseRoute = require('./routes/analyzeResponseRoute');
+ //ניתוח ציוני איכות
+const { analyzeUnscoredResponses } = require('./tasks/analyzeResponses');
+
+analyzeUnscoredResponses();
+setInterval(() => {
+    console.log('🔄 Running scheduled response analysis...');
+    analyzeUnscoredResponses().catch(err =>
+        console.error('❌ Auto-analysis failed:', err)
+    );
+}, 10 * 60 * 1000);
+
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.use('/api/reviews', reviewsRoute);
+app.use('/api/responses', responsesRoute);
+app.use('/api/analyze-response', analyzeResponseRoute);
+
+// Health Check
+app.get('/', (req, res) => {
+    res.send('👋 Welcome to HoteAI server!');
+});
+
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
+
+---
+File: output.txt
+---
+File Tree:
+
+server/
+    .env
+    grok.py
+    index.js
+    package-lock.json
+    package.json
+config/
+    db.js
+logs/
+    analyze-failures.log
+    chatgpt-errors.log
+    system.log
+models/
+    response.js
+    review.js
+routes/
+    analyzeResponseRoute.js
+    responsesRoute.js
+    reviewsRoute.js
+services/
+    chatgptService.js
+tasks/
+    analyzeResponses.js
+    scheduler.js
+utils/
+    logger.js
+
+Files Content:
+
+---
+File: .env
+---
+// Environment variables
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASS=a1212333
+DB_NAME=hoteai_db
+OPENAI_API_KEY=***REMOVED***
+
+---
+File: grok.py
+---
+import os
+import argparse
+import tiktoken
+
+
+def generate_file_tree(root_dir):
+    tree = ""
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Exclude specified directories
+
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d
+            not in [
+                "node_modules",
+                ".next",
+                ".git",
+                ".venv",
+                ".vscode",
+                "__pycache__",
+                "blockchain_data",
+            ]
+        ]
+        # Calculate the relative path from root_dir to dirpath
+        relative_dir = os.path.relpath(dirpath, root_dir)
+        # Count the number of separators in the relative path to determine the level
+        level = 0 if relative_dir == "." else relative_dir.count(os.sep) + 1
+        indent = "    " * (level - 1)
+        dir_name = os.path.basename(dirpath)
+        tree += f"{indent}{dir_name}/\n"
+        for f in filenames:
+            tree += f"{indent}    {f}\n"
+    return tree
+
+
+def get_all_files(root_dir):
+    file_paths = []
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Exclude specified directories
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d
+            not in [
+                "node_modules",
+                ".next",
+                ".git",
+                "migrations",
+                "validations",
+                "package.json",
+                "logs",
+                "backups",
+                "public",
+            ]
+        ]
+        for f in filenames:
+            # Exclude specific file types
+            if f in [
+                "package-lock.json",
+                "yarn-error.log",
+                ".svg",
+                "package-lock.json",
+                "tsconfig.json",
+                ".prettierrc",
+                ".eslintrc.json",
+                "README.md",
+                "postcss.config.mjs",
+                "transactions_784017-784116.json",
+                "bitcoin_data.db",
+                "bitcoind.session.sql",
+                "cleanup.log",
+                ".python-version",
+                "bitcoinetl",
+                "README.txt",
+                "bitcoin_etl.log",
+                "blocks_784017-784116.json",
+            ]:
+                continue
+            full_path = os.path.join(dirpath, f)
+            file_paths.append(full_path)
+    return file_paths
+
+
+def read_files(file_paths, root_dir):
+    content = ""
+    MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB limit
+    for i, file_path in enumerate(file_paths):
+        relative_path = os.path.relpath(file_path, root_dir)
+        print(f"Reading file {i+1}/{len(file_paths)}: {relative_path}")
+        content += f"\n---\nFile: {relative_path}\n---\n"
+        try:
+            # Skip large files
+            if os.path.getsize(file_path) > MAX_FILE_SIZE:
+                content += "<File skipped: Too large>\n"
+                continue
+            with open(file_path, "r", encoding="utf-8") as file:
+                content += file.read()
+        except UnicodeDecodeError:
+            content += "<File skipped: Invalid UTF-8 encoding>\n"
+        except Exception as e:
+            content += f"<Could not read file: {e}>\n"
+    return content
+
+
+def count_tokens(text):
+    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    tokens = encoding.encode(text, disallowed_special=())  # Disable special token check
+    return len(tokens)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Prepare folder contents for LLM prompt."
+    )
+    parser.add_argument("directory", help="The root directory of your code files.")
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="The output TXT file to save the concatenated content. Defaults to 'backend.txt' or 'frontend.txt'.",
+        default=None,
+    )
+    args = parser.parse_args()
+
+    root_dir = os.path.abspath(args.directory)
+
+    # Set output filename based on the directory name (backend or frontend)
+    if args.output is None:
+        # Default to using directory name as output file
+        directory_name = os.path.basename(root_dir)
+        output_filename = f"{directory_name}.txt"
+    else:
+        output_filename = args.output
+
+    # Generate file tree
+    print("Generating file tree...")
+    file_tree = generate_file_tree(root_dir)
+
+    # Get all file paths
+    print("Collecting file paths...")
+    file_paths = get_all_files(root_dir)
+
+    # Read all files and get their content
+    print("Reading files...")
+    files_content = read_files(file_paths, root_dir)
+
+    # Combine file tree and files content
+    total_output = f"File Tree:\n\n{file_tree}\nFiles Content:\n{files_content}"
+
+    # Count tokens
+    print("Counting tokens...")
+    token_count = count_tokens(total_output)
+
+    # Save the concatenated content to a TXT file
+    print(f"Saving to {output_filename}...")
+    with open(output_filename, "w", encoding="utf-8") as output_file:
+        output_file.write(total_output)
+
+    # Print the total token count
+    print(f"Total Tokens: {token_count}")
+    print(f"All content has been saved to {output_filename}")
+
+
+if __name__ == "__main__":
+    main()
+
+---
+File: index.js
+---
+// server/index.js
+
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+
+const reviewsRoute = require('./routes/reviewsRoute');
+const responsesRoute = require('./routes/responsesRoute');
+const analyzeResponseRoute = require('./routes/analyzeResponseRoute');
+ //ניתוח ציוני איכות
+const { analyzeUnscoredResponses } = require('./tasks/analyzeResponses');
+
+analyzeUnscoredResponses();
+setInterval(() => {
+    console.log('🔄 Running scheduled response analysis...');
+    analyzeUnscoredResponses().catch(err =>
+        console.error('❌ Auto-analysis failed:', err)
+    );
+}, 10 * 60 * 1000);
+
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.use('/api/reviews', reviewsRoute);
+app.use('/api/responses', responsesRoute);
+app.use('/api/analyze-response', analyzeResponseRoute);
+
+// Health Check
+app.get('/', (req, res) => {
+    res.send('👋 Welcome to HoteAI server!');
+});
+
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
+
+---
+File: package.json
+---
+{
+  "name": "hoteai-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.9.0",        
+    "openai": "^3.2.1",  
+    "dotenv": "^16.0.3",
+    "cors": "^2.8.5"
+  }
+}
+---
+File: config\db.js
+---
+// Database config (connection pool or ORM setup)
+
+// server/config/db.js
+require('dotenv').config();
+const { Pool } = require('pg');
+
+const pool = new Pool({
+    host: process.env.DB_HOST,     // "localhost" or your DB container name
+    user: process.env.DB_USER,     // e.g. "postgres"
+    password: process.env.DB_PASS, // a1212333
+    database: process.env.DB_NAME, // e.g. "hoteai_db"
+    port: process.env.DB_PORT
+    // e.g. 5432
+});
+console.log("Connecting with password:", process.env.DB_PASS);
+console.log("Loaded ENV:", process.env);
+module.exports = pool;
+---
+File: models\response.js
+---
+
+---
+File: models\review.js
+---
+
+---
+File: routes\analyzeResponseRoute.js
+---
+// server/routes/analyzeResponseRoute.js
+const express = require('express');
+const router = express.Router();
+const pool = require('../config/db');
+const { Configuration, OpenAIApi } = require('openai');
+
+const config = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(config);
+
+// POST /api/analyze-response
+router.post('/', async (req, res) => {
+  const { review_id } = req.body;
+  if (!review_id) return res.status(400).json({ error: 'Missing review_id' });
+
+  try {
+    // שליפת תגובת המלון מהביקורת
+    const { rows } = await pool.query(
+      'SELECT hotel_response FROM guest_reviews WHERE review_id = $1',
+      [review_id]
+    );
+
+    const response = rows[0]?.hotel_response;
+    if (!response) return res.status(404).json({ error: 'Hotel response not found' });
+
+    // יצירת פרומפט להערכת איכות
+    const prompt = `Evaluate the quality of this hotel response based on:
+1. Professional tone
+2. Addressing guest concerns
+3. Use of Hebrew + English (if applicable)
+4. Closure or hotel signature
+
+Give a numeric score from 0 to 100 only. Hotel Response: "${response}"`;
+
+    console.log("🔍 GPT Prompt:\n", prompt);
+
+    const gpt = await openai.createChatCompletion({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.3,
+    });
+
+    const raw = gpt.data.choices[0].message.content.trim();
+    console.log("🧠 GPT Response:", raw);
+
+    const match = raw.match(/\d{1,3}/);
+    const score = match ? parseFloat(match[0]) : null;
+
+    if (score === null) return res.status(500).json({ error: 'Failed to extract score from GPT response' });
+
+    await pool.query(
+      'UPDATE guest_reviews SET response_quality_score = $1 WHERE review_id = $2',
+      [score, review_id]
+    );
+
+    res.json({ review_id, score });
+  } catch (error) {
+    console.error('Error analyzing response quality:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+module.exports = router;
+
+---
+File: routes\responsesRoute.js
+---
+// server/routes/responsesRoute.js
+const express = require('express');
+const router = express.Router();
+const pool = require('../config/db');
+const { Configuration, OpenAIApi } = require('openai');
+
+const config = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(config);
+
+router.post('/', async (req, res) => {
+    const { reviewId, customMessage } = req.body;
+
+    try {
+        const { rows } = await pool.query(
+            'SELECT * FROM reviews WHERE id = $1',
+            [reviewId]
+        );
+        const review = rows[0];
+        if (!review) return res.status(404).json({ error: 'Review not found' });
+
+        const prompt = `
+    A guest left this review: "${review.review_text}".
+    Write a polite, professional hotel manager response.
+    Start with: "${customMessage}".
+    `;
+
+        const completion = await openai.createChatCompletion({
+            model: 'gpt-4',
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.7,
+        });
+
+        const aiReply = completion.data.choices[0].message.content.trim();
+
+        // Save to DB
+        await pool.query(
+            'UPDATE reviews SET response_text = $1 WHERE id = $2',
+            [aiReply, reviewId]
+        );
+
+        res.json({ response_text: aiReply });
+    } catch (error) {
+        console.error('AI response error:', error);
+        res.status(500).json({ error: 'Failed to generate AI response' });
+    }
+});
+
+module.exports = router;
+
+---
+File: routes\reviewsRoute.js
+---
+const express = require('express');
+const router = express.Router();
+const pool = require('../config/db'); // connection to PostgreSQL
+
+// GET /api/reviews?hotel_id=1&chain_id=2&from=2024-01-01&to=2024-12-31
+router.get('/', async (req, res) => {
+    try {
+        const { hotel_id, chain_id, from, to } = req.query;
+        const conditions = [];
+        const values = [];
+
+        // Dynamic WHERE clause building
+        if (hotel_id) {
+            values.push(hotel_id);
+            conditions.push(`gr.hotel_id = $${values.length}`);
+        }
+
+        if (chain_id) {
+            values.push(chain_id);
+            conditions.push(`h.chain_id = $${values.length}`);
+        }
+
+        if (from) {
+            values.push(from);
+            conditions.push(`gr.created_at >= $${values.length}`);
+        }
+
+        if (to) {
+            values.push(to);
+            conditions.push(`gr.created_at <= $${values.length}`);
+        }
+
+        const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+        const query = `
+      SELECT 
+        gr.review_id,
+        gr.review_text,
+        gr.rating,
+        gr.hotel_response,
+        gr.response_quality_score,
+        gr.created_at,
+        h.name AS hotel_name,
+        hc.chain_name AS hotel_chain
+      FROM Guest_Reviews gr
+      JOIN Hotels h ON gr.hotel_id = h.hotel_id
+      JOIN Hotel_Chains hc ON h.chain_id = hc.chain_id
+      ${whereClause}
+      ORDER BY gr.created_at DESC
+    `;
+
+        const { rows } = await pool.query(query, values);
+        res.json(rows);
+    } catch (err) {
+        console.error('Error fetching reviews:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+    
+});
+
+router.get('/response-quality-over-time', async (req, res) => {
+    const { hotel_id, chain_id, start_date, end_date } = req.query;
+
+    const values = [];
+    const conditions = ['response_quality_score IS NOT NULL'];
+
+    if (hotel_id) {
+        values.push(hotel_id);
+        conditions.push(`hotel_id = $${values.length}`);
+    }
+
+    if (chain_id) {
+        values.push(chain_id);
+        conditions.push(`hotel_id IN (SELECT hotel_id FROM hotels WHERE chain_id = $${values.length})`);
+    }
+
+    if (start_date) {
+        values.push(start_date);
+        conditions.push(`created_at >= $${values.length}`);
+    }
+
+    if (end_date) {
+        values.push(end_date);
+        conditions.push(`created_at <= $${values.length}`);
+    }
+
+    const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    try {
+        const result = await pool.query(`
+      SELECT
+        DATE(created_at) AS review_date,
+        AVG(response_quality_score) AS avg_quality
+      FROM guest_reviews
+      ${where}
+      GROUP BY review_date
+      ORDER BY review_date;
+    `, values);
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+module.exports = router;
+
+---
+File: services\chatgptService.js
+---
+// server/services/chatgptService.js
+const { Configuration, OpenAIApi } = require('openai');
+
+const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+// A function that sends the "reviewText" to ChatGPT and gets a response
+async function generateResponse(reviewText) {
+    try {
+        // This is a simplified prompt. Refine to your style, language, etc.
+        const prompt = `
+      The user wrote a hotel review: "${reviewText}".
+      Please draft a concise, professional, and empathetic response from the hotel manager’s perspective.
+      Be sure to address any concerns in the review.
+    `;
+
+        const response = await openai.createChatCompletion({
+            model: 'gpt-4o-mini',
+            messages: [{
+                role: 'user',
+                content: prompt
+            }],
+            temperature: 0.7
+        });
+        const aiMessage = response.data.choices[0].message.content.trim();
+        console.log('>>> Sending to ChatGPT:', reviewText);
+        console.log('>>> Response:', response.data.choices[0].message.content);
+        return aiMessage;
+    } catch (error) {
+        console.error('Error in generateResponse:', error);
+        throw error;
+    }
+}
+
+module.exports = {
+    generateResponse
+};
+
+---
+File: tasks\analyzeResponses.js
+---
+// server/tasks/analyzeResponses.js
+require('dotenv').config();
+const { Configuration, OpenAIApi } = require('openai');
+const pool = require('../config/db');
+const fs = require('fs');
+const path = require('path');
+
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+// פונקציה פשוטה לזיהוי אם טקסט הוא בעברית
+function isHebrew(text) {
+  return /[֐-׿]/.test(text);
+}
+
+async function analyzeUnscoredResponses() {
+  try {
+    const { rows } = await pool.query(`
+      SELECT review_id, review_text, hotel_response FROM guest_reviews 
+      WHERE hotel_response IS NOT NULL AND response_quality_score IS NULL
+    `);
+
+    for (const row of rows) {
+      const { review_id, review_text, hotel_response } = row;
+
+      const reviewLang = isHebrew(review_text) ? 'Hebrew' : 'English';
+
+      const prompt = `
+You are an AI tasked with scoring hotel responses. 
+The guest wrote a review in ${reviewLang}:
+"""
+${review_text}
+"""
+
+The hotel responded:
+"""
+${hotel_response}
+"""
+
+Evaluate the hotel response and return a numeric score (0-100) based on:
+1. Professional tone
+2. Empathy to the guest
+3. Addressing the concerns raised
+4. Language appropriateness:
+   - If the review is in Hebrew: full score is acceptable with a Hebrew response
+   - If the review is in English: full score requires the hotel to respond in both English and Hebrew
+5. Presence of a sign-off with the hotel name or representative.
+
+Return ONLY the score (numeric value).
+      `;
+
+      try {
+        const completion = await openai.createChatCompletion({
+          model: 'gpt-4o-mini',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.3,
+        });
+
+        const content = completion.data.choices[0].message.content;
+        const score = parseFloat(content.match(/\d+(\.\d+)?/)[0]);
+
+        await pool.query(
+          `UPDATE guest_reviews SET response_quality_score = $1 WHERE review_id = $2`,
+          [score, review_id]
+        );
+
+        console.log(`✔️ Updated review ${review_id} with score ${score}`);
+      } catch (err) {
+        const logPath = path.join(__dirname, '../logs/analyze-failures.log');
+        const { logAnalysis } = require('../utils/logger');
+        logAnalysis(`❌ Failed to score review_id=${review_id} → ${err.message}`);
+        console.error(`🔥 Failed to update review ${review_id}`, err.message);
+      }
+    }
+
+    console.log('✅ Done analyzing all unscored responses.');
+  } catch (err) {
+    console.error('🔥 General failure:', err);
+  }
+  const { logSystem } = require('../utils/logger');
+  logSystem('✅ Finished running analyzeResponses loop');
+}
+
+module.exports = { analyzeUnscoredResponses };
+
+---
+File: tasks\scheduler.js
+---
+const cron = require('node-cron');
+const { analyzeUnscoredResponses } = require('./analyzeResponses');
+
+// תריץ כל 10 דקות
+cron.schedule('*/10 * * * *', async () => {
+  console.log('⏰ Running scheduled response analysis...');
+  await analyzeUnscoredResponses();
+});
+---
+File: utils\logger.js
+---
+// server/utils/logger.js
+const fs = require('fs');
+const path = require('path');
+
+function writeLog(filename, message) {
+  const logPath = path.join(__dirname, '../logs', filename);
+  const timestamp = new Date().toISOString();
+  const line = `[${timestamp}] ${message}\n`;
+
+  fs.appendFile(logPath, line, err => {
+    if (err) console.error('❌ Failed to write to log:', err.message);
+  });
+}
+
+module.exports = {
+  logSystem: (msg) => writeLog('system.log', msg),
+  logGPT: (msg) => writeLog('chatgpt-errors.log', msg),
+  logAnalysis: (msg) => writeLog('analyze-failures.log', msg),
+};
+
+---
+File: package.json
+---
+{
+  "name": "hoteai-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.9.0",        
+    "openai": "^3.2.1",  
+    "dotenv": "^16.0.3",
+    "cors": "^2.8.5"
+  }
+}
+---
+File: config\db.js
+---
+// Database config (connection pool or ORM setup)
+
+// server/config/db.js
+require('dotenv').config();
+const { Pool } = require('pg');
+
+const pool = new Pool({
+    host: process.env.DB_HOST,     // "localhost" or your DB container name
+    user: process.env.DB_USER,     // e.g. "postgres"
+    password: process.env.DB_PASS, // a1212333
+    database: process.env.DB_NAME, // e.g. "hoteai_db"
+    port: process.env.DB_PORT
+    // e.g. 5432
+});
+console.log("Connecting with password:", process.env.DB_PASS);
+console.log("Loaded ENV:", process.env);
+module.exports = pool;
+---
+File: models\response.js
+---
+
+---
+File: models\review.js
+---
+
+---
+File: routes\analyzeResponseRoute.js
+---
+// server/routes/analyzeResponseRoute.js
+const express = require('express');
+const router = express.Router();
+const pool = require('../config/db');
+const { Configuration, OpenAIApi } = require('openai');
+
+const config = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(config);
+
+// POST /api/analyze-response
+router.post('/', async (req, res) => {
+  const { review_id } = req.body;
+  if (!review_id) return res.status(400).json({ error: 'Missing review_id' });
+
+  try {
+    // שליפת תגובת המלון מהביקורת
+    const { rows } = await pool.query(
+      'SELECT hotel_response FROM guest_reviews WHERE review_id = $1',
+      [review_id]
+    );
+
+    const response = rows[0]?.hotel_response;
+    if (!response) return res.status(404).json({ error: 'Hotel response not found' });
+
+    // יצירת פרומפט להערכת איכות
+    const prompt = `Evaluate the quality of this hotel response based on:
+1. Professional tone
+2. Addressing guest concerns
+3. Use of Hebrew + English (if applicable)
+4. Closure or hotel signature
+
+Give a numeric score from 0 to 100 only. Hotel Response: "${response}"`;
+
+    console.log("🔍 GPT Prompt:\n", prompt);
+
+    const gpt = await openai.createChatCompletion({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.3,
+    });
+
+    const raw = gpt.data.choices[0].message.content.trim();
+    console.log("🧠 GPT Response:", raw);
+
+    const match = raw.match(/\d{1,3}/);
+    const score = match ? parseFloat(match[0]) : null;
+
+    if (score === null) return res.status(500).json({ error: 'Failed to extract score from GPT response' });
+
+    await pool.query(
+      'UPDATE guest_reviews SET response_quality_score = $1 WHERE review_id = $2',
+      [score, review_id]
+    );
+
+    res.json({ review_id, score });
+  } catch (error) {
+    console.error('Error analyzing response quality:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+module.exports = router;
+
+---
+File: routes\responsesRoute.js
+---
+// server/routes/responsesRoute.js
+const express = require('express');
+const router = express.Router();
+const pool = require('../config/db');
+const { Configuration, OpenAIApi } = require('openai');
+
+const config = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(config);
+
+router.post('/', async (req, res) => {
+    const { reviewId, customMessage } = req.body;
+
+    try {
+        const { rows } = await pool.query(
+            'SELECT * FROM reviews WHERE id = $1',
+            [reviewId]
+        );
+        const review = rows[0];
+        if (!review) return res.status(404).json({ error: 'Review not found' });
+
+        const prompt = `
+    A guest left this review: "${review.review_text}".
+    Write a polite, professional hotel manager response.
+    Start with: "${customMessage}".
+    `;
+
+        const completion = await openai.createChatCompletion({
+            model: 'gpt-4',
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.7,
+        });
+
+        const aiReply = completion.data.choices[0].message.content.trim();
+
+        // Save to DB
+        await pool.query(
+            'UPDATE reviews SET response_text = $1 WHERE id = $2',
+            [aiReply, reviewId]
+        );
+
+        res.json({ response_text: aiReply });
+    } catch (error) {
+        console.error('AI response error:', error);
+        res.status(500).json({ error: 'Failed to generate AI response' });
+    }
+});
+
+module.exports = router;
+
+---
+File: routes\reviewsRoute.js
+---
+const express = require('express');
+const router = express.Router();
+const pool = require('../config/db'); // connection to PostgreSQL
+
+// GET /api/reviews?hotel_id=1&chain_id=2&from=2024-01-01&to=2024-12-31
+router.get('/', async (req, res) => {
+    try {
+        const { hotel_id, chain_id, from, to } = req.query;
+        const conditions = [];
+        const values = [];
+
+        // Dynamic WHERE clause building
+        if (hotel_id) {
+            values.push(hotel_id);
+            conditions.push(`gr.hotel_id = $${values.length}`);
+        }
+
+        if (chain_id) {
+            values.push(chain_id);
+            conditions.push(`h.chain_id = $${values.length}`);
+        }
+
+        if (from) {
+            values.push(from);
+            conditions.push(`gr.created_at >= $${values.length}`);
+        }
+
+        if (to) {
+            values.push(to);
+            conditions.push(`gr.created_at <= $${values.length}`);
+        }
+
+        const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+        const query = `
+      SELECT 
+        gr.review_id,
+        gr.review_text,
+        gr.rating,
+        gr.hotel_response,
+        gr.response_quality_score,
+        gr.created_at,
+        h.name AS hotel_name,
+        hc.chain_name AS hotel_chain
+      FROM Guest_Reviews gr
+      JOIN Hotels h ON gr.hotel_id = h.hotel_id
+      JOIN Hotel_Chains hc ON h.chain_id = hc.chain_id
+      ${whereClause}
+      ORDER BY gr.created_at DESC
+    `;
+
+        const { rows } = await pool.query(query, values);
+        res.json(rows);
+    } catch (err) {
+        console.error('Error fetching reviews:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+    
+});
+
+router.get('/response-quality-over-time', async (req, res) => {
+    const { hotel_id, chain_id, start_date, end_date } = req.query;
+
+    const values = [];
+    const conditions = ['response_quality_score IS NOT NULL'];
+
+    if (hotel_id) {
+        values.push(hotel_id);
+        conditions.push(`hotel_id = $${values.length}`);
+    }
+
+    if (chain_id) {
+        values.push(chain_id);
+        conditions.push(`hotel_id IN (SELECT hotel_id FROM hotels WHERE chain_id = $${values.length})`);
+    }
+
+    if (start_date) {
+        values.push(start_date);
+        conditions.push(`created_at >= $${values.length}`);
+    }
+
+    if (end_date) {
+        values.push(end_date);
+        conditions.push(`created_at <= $${values.length}`);
+    }
+
+    const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    try {
+        const result = await pool.query(`
+      SELECT
+        DATE(created_at) AS review_date,
+        AVG(response_quality_score) AS avg_quality
+      FROM guest_reviews
+      ${where}
+      GROUP BY review_date
+      ORDER BY review_date;
+    `, values);
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+module.exports = router;
+
+---
+File: services\chatgptService.js
+---
+// server/services/chatgptService.js
+const { Configuration, OpenAIApi } = require('openai');
+
+const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+// A function that sends the "reviewText" to ChatGPT and gets a response
+async function generateResponse(reviewText) {
+    try {
+        // This is a simplified prompt. Refine to your style, language, etc.
+        const prompt = `
+      The user wrote a hotel review: "${reviewText}".
+      Please draft a concise, professional, and empathetic response from the hotel manager’s perspective.
+      Be sure to address any concerns in the review.
+    `;
+
+        const response = await openai.createChatCompletion({
+            model: 'gpt-4o-mini',
+            messages: [{
+                role: 'user',
+                content: prompt
+            }],
+            temperature: 0.7
+        });
+        const aiMessage = response.data.choices[0].message.content.trim();
+        console.log('>>> Sending to ChatGPT:', reviewText);
+        console.log('>>> Response:', response.data.choices[0].message.content);
+        return aiMessage;
+    } catch (error) {
+        console.error('Error in generateResponse:', error);
+        throw error;
+    }
+}
+
+module.exports = {
+    generateResponse
+};
+
+---
+File: tasks\analyzeResponses.js
+---
+// server/tasks/analyzeResponses.js
+require('dotenv').config();
+const { Configuration, OpenAIApi } = require('openai');
+const pool = require('../config/db');
+const fs = require('fs');
+const path = require('path');
+
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+// פונקציה פשוטה לזיהוי אם טקסט הוא בעברית
+function isHebrew(text) {
+  return /[֐-׿]/.test(text);
+}
+
+async function analyzeUnscoredResponses() {
+  try {
+    const { rows } = await pool.query(`
+      SELECT review_id, review_text, hotel_response FROM guest_reviews 
+      WHERE hotel_response IS NOT NULL AND response_quality_score IS NULL
+    `);
+
+    for (const row of rows) {
+      const { review_id, review_text, hotel_response } = row;
+
+      const reviewLang = isHebrew(review_text) ? 'Hebrew' : 'English';
+
+      const prompt = `
+You are an AI tasked with scoring hotel responses. 
+The guest wrote a review in ${reviewLang}:
+"""
+${review_text}
+"""
+
+The hotel responded:
+"""
+${hotel_response}
+"""
+
+Evaluate the hotel response and return a numeric score (0-100) based on:
+1. Professional tone
+2. Empathy to the guest
+3. Addressing the concerns raised
+4. Language appropriateness:
+   - If the review is in Hebrew: full score is acceptable with a Hebrew response
+   - If the review is in English: full score requires the hotel to respond in both English and Hebrew
+5. Presence of a sign-off with the hotel name or representative.
+
+Return ONLY the score (numeric value).
+      `;
+
+      try {
+        const completion = await openai.createChatCompletion({
+          model: 'gpt-4o-mini',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.3,
+        });
+
+        const content = completion.data.choices[0].message.content;
+        const score = parseFloat(content.match(/\d+(\.\d+)?/)[0]);
+
+        await pool.query(
+          `UPDATE guest_reviews SET response_quality_score = $1 WHERE review_id = $2`,
+          [score, review_id]
+        );
+
+        console.log(`✔️ Updated review ${review_id} with score ${score}`);
+      } catch (err) {
+        const logPath = path.join(__dirname, '../logs/analyze-failures.log');
+        const { logAnalysis } = require('../utils/logger');
+        logAnalysis(`❌ Failed to score review_id=${review_id} → ${err.message}`);
+        console.error(`🔥 Failed to update review ${review_id}`, err.message);
+      }
+    }
+
+    console.log('✅ Done analyzing all unscored responses.');
+  } catch (err) {
+    console.error('🔥 General failure:', err);
+  }
+  const { logSystem } = require('../utils/logger');
+  logSystem('✅ Finished running analyzeResponses loop');
+}
+
+module.exports = { analyzeUnscoredResponses };
+
+---
+File: tasks\scheduler.js
+---
+const cron = require('node-cron');
+const { analyzeUnscoredResponses } = require('./analyzeResponses');
+
+// תריץ כל 10 דקות
+cron.schedule('*/10 * * * *', async () => {
+  console.log('⏰ Running scheduled response analysis...');
+  await analyzeUnscoredResponses();
+});
+---
+File: utils\logger.js
+---
+// server/utils/logger.js
+const fs = require('fs');
+const path = require('path');
+
+function writeLog(filename, message) {
+  const logPath = path.join(__dirname, '../logs', filename);
+  const timestamp = new Date().toISOString();
+  const line = `[${timestamp}] ${message}\n`;
+
+  fs.appendFile(logPath, line, err => {
+    if (err) console.error('❌ Failed to write to log:', err.message);
+  });
+}
+
+module.exports = {
+  logSystem: (msg) => writeLog('system.log', msg),
+  logGPT: (msg) => writeLog('chatgpt-errors.log', msg),
+  logAnalysis: (msg) => writeLog('analyze-failures.log', msg),
+};
+
+---
+File: package.json
+---
+{
+  "name": "hoteai-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.9.0",        
+    "openai": "^3.2.1",  
+    "dotenv": "^16.0.3",
+    "cors": "^2.8.5"
+  }
+}
+---
+File: config\db.js
+---
+// Database config (connection pool or ORM setup)
+
+// server/config/db.js
+require('dotenv').config();
+const { Pool } = require('pg');
+
+const pool = new Pool({
+    host: process.env.DB_HOST,     // "localhost" or your DB container name
+    user: process.env.DB_USER,     // e.g. "postgres"
+    password: process.env.DB_PASS, // a1212333
+    database: process.env.DB_NAME, // e.g. "hoteai_db"
+    port: process.env.DB_PORT
+    // e.g. 5432
+});
+console.log("Connecting with password:", process.env.DB_PASS);
+console.log("Loaded ENV:", process.env);
+module.exports = pool;
+---
+File: models\response.js
+---
+
+---
+File: models\review.js
+---
+
+---
+File: routes\analyzeResponseRoute.js
+---
+// server/routes/analyzeResponseRoute.js
+const express = require('express');
+const router = express.Router();
+const pool = require('../config/db');
+const { Configuration, OpenAIApi } = require('openai');
+
+const config = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(config);
+
+// POST /api/analyze-response
+router.post('/', async (req, res) => {
+  const { review_id } = req.body;
+  if (!review_id) return res.status(400).json({ error: 'Missing review_id' });
+
+  try {
+    // שליפת תגובת המלון מהביקורת
+    const { rows } = await pool.query(
+      'SELECT hotel_response FROM guest_reviews WHERE review_id = $1',
+      [review_id]
+    );
+
+    const response = rows[0]?.hotel_response;
+    if (!response) return res.status(404).json({ error: 'Hotel response not found' });
+
+    // יצירת פרומפט להערכת איכות
+    const prompt = `Evaluate the quality of this hotel response based on:
+1. Professional tone
+2. Addressing guest concerns
+3. Use of Hebrew + English (if applicable)
+4. Closure or hotel signature
+
+Give a numeric score from 0 to 100 only. Hotel Response: "${response}"`;
+
+    console.log("🔍 GPT Prompt:\n", prompt);
+
+    const gpt = await openai.createChatCompletion({
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.3,
+    });
+
+    const raw = gpt.data.choices[0].message.content.trim();
+    console.log("🧠 GPT Response:", raw);
+
+    const match = raw.match(/\d{1,3}/);
+    const score = match ? parseFloat(match[0]) : null;
+
+    if (score === null) return res.status(500).json({ error: 'Failed to extract score from GPT response' });
+
+    await pool.query(
+      'UPDATE guest_reviews SET response_quality_score = $1 WHERE review_id = $2',
+      [score, review_id]
+    );
+
+    res.json({ review_id, score });
+  } catch (error) {
+    console.error('Error analyzing response quality:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+module.exports = router;
+
+---
+File: routes\responsesRoute.js
+---
+// server/routes/responsesRoute.js
+const express = require('express');
+const router = express.Router();
+const pool = require('../config/db');
+const { Configuration, OpenAIApi } = require('openai');
+
+const config = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(config);
+
+router.post('/', async (req, res) => {
+    const { reviewId, customMessage } = req.body;
+
+    try {
+        const { rows } = await pool.query(
+            'SELECT * FROM reviews WHERE id = $1',
+            [reviewId]
+        );
+        const review = rows[0];
+        if (!review) return res.status(404).json({ error: 'Review not found' });
+
+        const prompt = `
+    A guest left this review: "${review.review_text}".
+    Write a polite, professional hotel manager response.
+    Start with: "${customMessage}".
+    `;
+
+        const completion = await openai.createChatCompletion({
+            model: 'gpt-4',
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.7,
+        });
+
+        const aiReply = completion.data.choices[0].message.content.trim();
+
+        // Save to DB
+        await pool.query(
+            'UPDATE reviews SET response_text = $1 WHERE id = $2',
+            [aiReply, reviewId]
+        );
+
+        res.json({ response_text: aiReply });
+    } catch (error) {
+        console.error('AI response error:', error);
+        res.status(500).json({ error: 'Failed to generate AI response' });
+    }
+});
+
+module.exports = router;
+
+---
+File: routes\reviewsRoute.js
+---
+const express = require('express');
+const router = express.Router();
+const pool = require('../config/db'); // connection to PostgreSQL
+
+// GET /api/reviews?hotel_id=1&chain_id=2&from=2024-01-01&to=2024-12-31
+router.get('/', async (req, res) => {
+    try {
+        const { hotel_id, chain_id, from, to } = req.query;
+        const conditions = [];
+        const values = [];
+
+        // Dynamic WHERE clause building
+        if (hotel_id) {
+            values.push(hotel_id);
+            conditions.push(`gr.hotel_id = $${values.length}`);
+        }
+
+        if (chain_id) {
+            values.push(chain_id);
+            conditions.push(`h.chain_id = $${values.length}`);
+        }
+
+        if (from) {
+            values.push(from);
+            conditions.push(`gr.created_at >= $${values.length}`);
+        }
+
+        if (to) {
+            values.push(to);
+            conditions.push(`gr.created_at <= $${values.length}`);
+        }
+
+        const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+        const query = `
+      SELECT 
+        gr.review_id,
+        gr.review_text,
+        gr.rating,
+        gr.hotel_response,
+        gr.response_quality_score,
+        gr.created_at,
+        h.name AS hotel_name,
+        hc.chain_name AS hotel_chain
+      FROM Guest_Reviews gr
+      JOIN Hotels h ON gr.hotel_id = h.hotel_id
+      JOIN Hotel_Chains hc ON h.chain_id = hc.chain_id
+      ${whereClause}
+      ORDER BY gr.created_at DESC
+    `;
+
+        const { rows } = await pool.query(query, values);
+        res.json(rows);
+    } catch (err) {
+        console.error('Error fetching reviews:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+    
+});
+
+router.get('/response-quality-over-time', async (req, res) => {
+    const { hotel_id, chain_id, start_date, end_date } = req.query;
+
+    const values = [];
+    const conditions = ['response_quality_score IS NOT NULL'];
+
+    if (hotel_id) {
+        values.push(hotel_id);
+        conditions.push(`hotel_id = $${values.length}`);
+    }
+
+    if (chain_id) {
+        values.push(chain_id);
+        conditions.push(`hotel_id IN (SELECT hotel_id FROM hotels WHERE chain_id = $${values.length})`);
+    }
+
+    if (start_date) {
+        values.push(start_date);
+        conditions.push(`created_at >= $${values.length}`);
+    }
+
+    if (end_date) {
+        values.push(end_date);
+        conditions.push(`created_at <= $${values.length}`);
+    }
+
+    const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    try {
+        const result = await pool.query(`
+      SELECT
+        DATE(created_at) AS review_date,
+        AVG(response_quality_score) AS avg_quality
+      FROM guest_reviews
+      ${where}
+      GROUP BY review_date
+      ORDER BY review_date;
+    `, values);
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+module.exports = router;
+
+---
+File: services\chatgptService.js
+---
+// server/services/chatgptService.js
+const { Configuration, OpenAIApi } = require('openai');
+
+const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+// A function that sends the "reviewText" to ChatGPT and gets a response
+async function generateResponse(reviewText) {
+    try {
+        // This is a simplified prompt. Refine to your style, language, etc.
+        const prompt = `
+      The user wrote a hotel review: "${reviewText}".
+      Please draft a concise, professional, and empathetic response from the hotel manager’s perspective.
+      Be sure to address any concerns in the review.
+    `;
+
+        const response = await openai.createChatCompletion({
+            model: 'gpt-4o-mini',
+            messages: [{
+                role: 'user',
+                content: prompt
+            }],
+            temperature: 0.7
+        });
+        const aiMessage = response.data.choices[0].message.content.trim();
+        console.log('>>> Sending to ChatGPT:', reviewText);
+        console.log('>>> Response:', response.data.choices[0].message.content);
+        return aiMessage;
+    } catch (error) {
+        console.error('Error in generateResponse:', error);
+        throw error;
+    }
+}
+
+module.exports = {
+    generateResponse
+};
+
+---
+File: tasks\analyzeResponses.js
+---
+// server/tasks/analyzeResponses.js
+require('dotenv').config();
+const { Configuration, OpenAIApi } = require('openai');
+const pool = require('../config/db');
+const fs = require('fs');
+const path = require('path');
+
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
+// פונקציה פשוטה לזיהוי אם טקסט הוא בעברית
+function isHebrew(text) {
+  return /[֐-׿]/.test(text);
+}
+
+async function analyzeUnscoredResponses() {
+  try {
+    const { rows } = await pool.query(`
+      SELECT review_id, review_text, hotel_response FROM guest_reviews 
+      WHERE hotel_response IS NOT NULL AND response_quality_score IS NULL
+    `);
+
+    for (const row of rows) {
+      const { review_id, review_text, hotel_response } = row;
+
+      const reviewLang = isHebrew(review_text) ? 'Hebrew' : 'English';
+
+      const prompt = `
+You are an AI tasked with scoring hotel responses. 
+The guest wrote a review in ${reviewLang}:
+"""
+${review_text}
+"""
+
+The hotel responded:
+"""
+${hotel_response}
+"""
+
+Evaluate the hotel response and return a numeric score (0-100) based on:
+1. Professional tone
+2. Empathy to the guest
+3. Addressing the concerns raised
+4. Language appropriateness:
+   - If the review is in Hebrew: full score is acceptable with a Hebrew response
+   - If the review is in English: full score requires the hotel to respond in both English and Hebrew
+5. Presence of a sign-off with the hotel name or representative.
+
+Return ONLY the score (numeric value).
+      `;
+
+      try {
+        const completion = await openai.createChatCompletion({
+          model: 'gpt-4o-mini',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.3,
+        });
+
+        const content = completion.data.choices[0].message.content;
+        const score = parseFloat(content.match(/\d+(\.\d+)?/)[0]);
+
+        await pool.query(
+          `UPDATE guest_reviews SET response_quality_score = $1 WHERE review_id = $2`,
+          [score, review_id]
+        );
+
+        console.log(`✔️ Updated review ${review_id} with score ${score}`);
+      } catch (err) {
+        const logPath = path.join(__dirname, '../logs/analyze-failures.log');
+        const { logAnalysis } = require('../utils/logger');
+        logAnalysis(`❌ Failed to score review_id=${review_id} → ${err.message}`);
+        console.error(`🔥 Failed to update review ${review_id}`, err.message);
+      }
+    }
+
+    console.log('✅ Done analyzing all unscored responses.');
+  } catch (err) {
+    console.error('🔥 General failure:', err);
+  }
+  const { logSystem } = require('../utils/logger');
+  logSystem('✅ Finished running analyzeResponses loop');
+}
+
+module.exports = { analyzeUnscoredResponses };
+
+---
+File: tasks\scheduler.js
+---
+const cron = require('node-cron');
+const { analyzeUnscoredResponses } = require('./analyzeResponses');
+
+// תריץ כל 10 דקות
+cron.schedule('*/10 * * * *', async () => {
+  console.log('⏰ Running scheduled response analysis...');
+  await analyzeUnscoredResponses();
+});
+---
+File: utils\logger.js
+---
+// server/utils/logger.js
+const fs = require('fs');
+const path = require('path');
+
+function writeLog(filename, message) {
+  const logPath = path.join(__dirname, '../logs', filename);
+  const timestamp = new Date().toISOString();
+  const line = `[${timestamp}] ${message}\n`;
+
+  fs.appendFile(logPath, line, err => {
+    if (err) console.error('❌ Failed to write to log:', err.message);
+  });
+}
+
+module.exports = {
+  logSystem: (msg) => writeLog('system.log', msg),
+  logGPT: (msg) => writeLog('chatgpt-errors.log', msg),
+  logAnalysis: (msg) => writeLog('analyze-failures.log', msg),
+};
+
+---
+File: eslint.config.js
+---
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+
+export default [
+  { ignores: ['dist'] },
+  {
+    files: ['**/*.{js,jsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  },
+]
+
+---
+File: grok.py
+---
+import os
+import argparse
+import tiktoken
+
+
+def generate_file_tree(root_dir):
+    tree = ""
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Exclude specified directories
+
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d
+            not in [
+                "node_modules",
+                ".next",
+                ".git",
+                ".venv",
+                ".vscode",
+                "__pycache__",
+                "blockchain_data",
+            ]
+        ]
+        # Calculate the relative path from root_dir to dirpath
+        relative_dir = os.path.relpath(dirpath, root_dir)
+        # Count the number of separators in the relative path to determine the level
+        level = 0 if relative_dir == "." else relative_dir.count(os.sep) + 1
+        indent = "    " * (level - 1)
+        dir_name = os.path.basename(dirpath)
+        tree += f"{indent}{dir_name}/\n"
+        for f in filenames:
+            tree += f"{indent}    {f}\n"
+    return tree
+
+
+def get_all_files(root_dir):
+    file_paths = []
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Exclude specified directories
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d
+            not in [
+                "node_modules",
+                ".next",
+                ".git",
+                "migrations",
+                "validations",
+                "package.json",
+                "logs",
+                "backups",
+                "public",
+            ]
+        ]
+        for f in filenames:
+            # Exclude specific file types
+            if f in [
+                "package-lock.json",
+                "yarn-error.log",
+                ".svg",
+                "package-lock.json",
+                "tsconfig.json",
+                ".prettierrc",
+                ".eslintrc.json",
+                "README.md",
+                "postcss.config.mjs",
+                "transactions_784017-784116.json",
+                "bitcoin_data.db",
+                "bitcoind.session.sql",
+                "cleanup.log",
+                ".python-version",
+                "bitcoinetl",
+                "README.txt",
+                "bitcoin_etl.log",
+                "blocks_784017-784116.json",
+            ]:
+                continue
+            full_path = os.path.join(dirpath, f)
+            file_paths.append(full_path)
+    return file_paths
+
+
+def read_files(file_paths, root_dir):
+    content = ""
+    MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB limit
+    for i, file_path in enumerate(file_paths):
+        relative_path = os.path.relpath(file_path, root_dir)
+        print(f"Reading file {i+1}/{len(file_paths)}: {relative_path}")
+        content += f"\n---\nFile: {relative_path}\n---\n"
+        try:
+            # Skip large files
+            if os.path.getsize(file_path) > MAX_FILE_SIZE:
+                content += "<File skipped: Too large>\n"
+                continue
+            with open(file_path, "r", encoding="utf-8") as file:
+                content += file.read()
+        except UnicodeDecodeError:
+            content += "<File skipped: Invalid UTF-8 encoding>\n"
+        except Exception as e:
+            content += f"<Could not read file: {e}>\n"
+    return content
+
+
+def count_tokens(text):
+    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    tokens = encoding.encode(text, disallowed_special=())  # Disable special token check
+    return len(tokens)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Prepare folder contents for LLM prompt."
+    )
+    parser.add_argument("directory", help="The root directory of your code files.")
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="The output TXT file to save the concatenated content. Defaults to 'backend.txt' or 'frontend.txt'.",
+        default=None,
+    )
+    args = parser.parse_args()
+
+    root_dir = os.path.abspath(args.directory)
+
+    # Set output filename based on the directory name (backend or frontend)
+    if args.output is None:
+        # Default to using directory name as output file
+        directory_name = os.path.basename(root_dir)
+        output_filename = f"{directory_name}.txt"
+    else:
+        output_filename = args.output
+
+    # Generate file tree
+    print("Generating file tree...")
+    file_tree = generate_file_tree(root_dir)
+
+    # Get all file paths
+    print("Collecting file paths...")
+    file_paths = get_all_files(root_dir)
+
+    # Read all files and get their content
+    print("Reading files...")
+    files_content = read_files(file_paths, root_dir)
+
+    # Combine file tree and files content
+    total_output = f"File Tree:\n\n{file_tree}\nFiles Content:\n{files_content}"
+
+    # Count tokens
+    print("Counting tokens...")
+    token_count = count_tokens(total_output)
+
+    # Save the concatenated content to a TXT file
+    print(f"Saving to {output_filename}...")
+    with open(output_filename, "w", encoding="utf-8") as output_file:
+        output_file.write(total_output)
+
+    # Print the total token count
+    print(f"Total Tokens: {token_count}")
+    print(f"All content has been saved to {output_filename}")
+
+
+if __name__ == "__main__":
+    main()
+
+---
+File: index.html
+---
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HoteAI Dashboard</title>
+
+  <!-- ✅ זה הלינק שצריך להופיע כאן -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>
+---
+File: package.json
+---
+{
+  "name": "client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.15.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@tailwindcss/postcss": "^4.1.4",
+    "@tailwindcss/typography": "^0.5.16",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.22.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.3",
+    "vite": "^6.3.1"
+  }
+}
+
+---
+File: postcss.config.js
+---
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+
+---
+File: tailwind.config.js
+---
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html", 
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
+}
+---
+File: vite.config.js
+---
+// client/vite.config.js
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/api': 'http://localhost:4000'
+    }
+  }
+});
+
+---
+File: src\App.css
+---
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+---
+File: src\App.jsx
+---
+// my-hotai-project/client/src/App.jsx
+import ReviewsDashboard from './components/ReviewsDashboard';
+
+function App() {
+  return (
+    <div className="font-sans">
+      <ReviewsDashboard />
+    </div>
+  );
+}
+export default App;
+
+---
+File: src\index.css
+---
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply font-sans;
+}
+---
+File: src\main.jsx
+---
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import './index.css' 
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
+
+---
+File: src\assets\react.svg
+---
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+---
+File: src\components\ReviewsDashboard.jsx
+---
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line
+} from 'recharts'; // ✅ הוספתי LineChart ו־Line
+
+const COLORS = ['#00C49F', '#FF8042'];
+
+function ResponseQualityChart() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios.get('/api/reviews/response-quality-over-time')
+      .then(res => {
+        if (Array.isArray(res.data)) {
+          setData(res.data);
+        } else {
+          console.error('Unexpected response format:', res.data);
+          setData([]);
+        }
+      })
+      .catch(err => console.error('Error fetching response quality:', err));
+  }, []);
+
+  return (
+    <LineChart width={600} height={300} data={data}>
+      <CartesianGrid stroke="#ccc" />
+      <XAxis dataKey="review_date" />
+      <YAxis />
+      <Tooltip />
+      <Line type="monotone" dataKey="avg_quality" stroke="#8884d8" />
+    </LineChart>
+  );
+}
+
+function ReviewsDashboard() {
+  const [reviews, setReviews] = useState([]);
+  const [filters, setFilters] = useState({ hotel_id: '', chain_id: '', from: '', to: '' });
+
+  useEffect(() => {
+    fetchReviews();
+  }, [filters]);
+
+  const fetchReviews = async () => {
+    try {
+      const params = {};
+      if (filters.hotel_id) params.hotel_id = filters.hotel_id;
+      if (filters.chain_id) params.chain_id = filters.chain_id;
+      if (filters.from) params.from = filters.from;
+      if (filters.to) params.to = filters.to;
+
+      const res = await axios.get('http://localhost:4000/api/reviews', { params });
+      setReviews(res.data);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+    }
+  };
+
+  const ratingCounts = Array.from({ length: 10 }, (_, i) => {
+    const rating = i + 1;
+    const count = reviews.filter(r => r.rating === rating).length;
+    return { rating: rating.toString(), count };
+  });
+
+  const answered = reviews.filter(r => r.hotel_response).length;
+  const unanswered = reviews.length - answered;
+  const responseData = [
+    { name: 'Answered', value: answered },
+    { name: 'Unanswered', value: unanswered }
+  ];
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-8 text-gray-800">📊 Reviews Dashboard</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <input type="number" name="hotel_id" placeholder="Hotel ID" onChange={handleFilterChange} className="p-2 border rounded" />
+        <input type="number" name="chain_id" placeholder="Chain ID" onChange={handleFilterChange} className="p-2 border rounded" />
+        <input type="date" name="from" onChange={handleFilterChange} className="p-2 border rounded" />
+        <input type="date" name="to" onChange={handleFilterChange} className="p-2 border rounded" />
+      </div>
+
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4 text-gray-700">Rating Distribution</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={ratingCounts}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="rating" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="count" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4 text-gray-700">AI Response Rate</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={responseData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                label
+              >
+                {responseData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                ))}
+              </Pie>
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </section>
+
+      {/* ✅ גרף חדש: איכות תגובות לאורך זמן */}
+      <section className="bg-white p-6 rounded-lg shadow mb-12">
+        <h2 className="text-xl font-semibold mb-4 text-gray-700">Response Quality Over Time</h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <ResponseQualityChart />
+        </ResponsiveContainer>
+      </section>
+
+      <h2 className="text-2xl font-semibold mb-4 text-gray-700">All Reviews</h2>
+      <ul className="space-y-6">
+        {reviews.map((rev) => (
+          <li key={rev.review_id} className="bg-white p-4 shadow rounded-lg border">
+            <p className="text-gray-800 font-semibold">👤 {rev.review_text}</p>
+            <p className="text-gray-600">⭐ Rating: {rev.rating}</p>
+            <p className="text-gray-500">🏨 Hotel: {rev.hotel_name} | 🏢 Chain: {rev.hotel_chain}</p>
+            <p className="mt-2"><strong>Hotel Response:</strong> {rev.hotel_response || 'No response'}</p>
+            <p><strong>Response Quality Score:</strong> {rev.response_quality_score !== null ? rev.response_quality_score : 'N/A'}</p>
+            <p className="text-sm text-gray-400">🕒 {new Date(rev.created_at).toLocaleDateString()}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default ReviewsDashboard;
+
+---
+File: eslint.config.js
+---
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+
+export default [
+  { ignores: ['dist'] },
+  {
+    files: ['**/*.{js,jsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  },
+]
+
+---
+File: grok.py
+---
+import os
+import argparse
+import tiktoken
+
+
+def generate_file_tree(root_dir):
+    tree = ""
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Exclude specified directories
+
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d
+            not in [
+                "node_modules",
+                ".next",
+                ".git",
+                ".venv",
+                ".vscode",
+                "__pycache__",
+                "blockchain_data",
+            ]
+        ]
+        # Calculate the relative path from root_dir to dirpath
+        relative_dir = os.path.relpath(dirpath, root_dir)
+        # Count the number of separators in the relative path to determine the level
+        level = 0 if relative_dir == "." else relative_dir.count(os.sep) + 1
+        indent = "    " * (level - 1)
+        dir_name = os.path.basename(dirpath)
+        tree += f"{indent}{dir_name}/\n"
+        for f in filenames:
+            tree += f"{indent}    {f}\n"
+    return tree
+
+
+def get_all_files(root_dir):
+    file_paths = []
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Exclude specified directories
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d
+            not in [
+                "node_modules",
+                ".next",
+                ".git",
+                "migrations",
+                "validations",
+                "package.json",
+                "logs",
+                "backups",
+                "public",
+            ]
+        ]
+        for f in filenames:
+            # Exclude specific file types
+            if f in [
+                "package-lock.json",
+                "yarn-error.log",
+                ".svg",
+                "package-lock.json",
+                "tsconfig.json",
+                ".prettierrc",
+                ".eslintrc.json",
+                "README.md",
+                "postcss.config.mjs",
+                "transactions_784017-784116.json",
+                "bitcoin_data.db",
+                "bitcoind.session.sql",
+                "cleanup.log",
+                ".python-version",
+                "bitcoinetl",
+                "README.txt",
+                "bitcoin_etl.log",
+                "blocks_784017-784116.json",
+            ]:
+                continue
+            full_path = os.path.join(dirpath, f)
+            file_paths.append(full_path)
+    return file_paths
+
+
+def read_files(file_paths, root_dir):
+    content = ""
+    MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB limit
+    for i, file_path in enumerate(file_paths):
+        relative_path = os.path.relpath(file_path, root_dir)
+        print(f"Reading file {i+1}/{len(file_paths)}: {relative_path}")
+        content += f"\n---\nFile: {relative_path}\n---\n"
+        try:
+            # Skip large files
+            if os.path.getsize(file_path) > MAX_FILE_SIZE:
+                content += "<File skipped: Too large>\n"
+                continue
+            with open(file_path, "r", encoding="utf-8") as file:
+                content += file.read()
+        except UnicodeDecodeError:
+            content += "<File skipped: Invalid UTF-8 encoding>\n"
+        except Exception as e:
+            content += f"<Could not read file: {e}>\n"
+    return content
+
+
+def count_tokens(text):
+    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    tokens = encoding.encode(text, disallowed_special=())  # Disable special token check
+    return len(tokens)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Prepare folder contents for LLM prompt."
+    )
+    parser.add_argument("directory", help="The root directory of your code files.")
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="The output TXT file to save the concatenated content. Defaults to 'backend.txt' or 'frontend.txt'.",
+        default=None,
+    )
+    args = parser.parse_args()
+
+    root_dir = os.path.abspath(args.directory)
+
+    # Set output filename based on the directory name (backend or frontend)
+    if args.output is None:
+        # Default to using directory name as output file
+        directory_name = os.path.basename(root_dir)
+        output_filename = f"{directory_name}.txt"
+    else:
+        output_filename = args.output
+
+    # Generate file tree
+    print("Generating file tree...")
+    file_tree = generate_file_tree(root_dir)
+
+    # Get all file paths
+    print("Collecting file paths...")
+    file_paths = get_all_files(root_dir)
+
+    # Read all files and get their content
+    print("Reading files...")
+    files_content = read_files(file_paths, root_dir)
+
+    # Combine file tree and files content
+    total_output = f"File Tree:\n\n{file_tree}\nFiles Content:\n{files_content}"
+
+    # Count tokens
+    print("Counting tokens...")
+    token_count = count_tokens(total_output)
+
+    # Save the concatenated content to a TXT file
+    print(f"Saving to {output_filename}...")
+    with open(output_filename, "w", encoding="utf-8") as output_file:
+        output_file.write(total_output)
+
+    # Print the total token count
+    print(f"Total Tokens: {token_count}")
+    print(f"All content has been saved to {output_filename}")
+
+
+if __name__ == "__main__":
+    main()
+
+---
+File: index.html
+---
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HoteAI Dashboard</title>
+
+  <!-- ✅ זה הלינק שצריך להופיע כאן -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>
+---
+File: package.json
+---
+{
+  "name": "client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.15.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@tailwindcss/postcss": "^4.1.4",
+    "@tailwindcss/typography": "^0.5.16",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.22.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.3",
+    "vite": "^6.3.1"
+  }
+}
+
+---
+File: postcss.config.js
+---
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+
+---
+File: tailwind.config.js
+---
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html", 
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
+}
+---
+File: vite.config.js
+---
+// client/vite.config.js
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/api': 'http://localhost:4000'
+    }
+  }
+});
+
+---
+File: src\App.css
+---
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+---
+File: src\App.jsx
+---
+// my-hotai-project/client/src/App.jsx
+import ReviewsDashboard from './components/ReviewsDashboard';
+
+function App() {
+  return (
+    <div className="font-sans">
+      <ReviewsDashboard />
+    </div>
+  );
+}
+export default App;
+
+---
+File: src\index.css
+---
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply font-sans;
+}
+---
+File: src\main.jsx
+---
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import './index.css' 
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
+
+---
+File: src\assets\react.svg
+---
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+---
+File: src\components\ReviewsDashboard.jsx
+---
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line
+} from 'recharts'; // ✅ הוספתי LineChart ו־Line
+
+const COLORS = ['#00C49F', '#FF8042'];
+
+function ResponseQualityChart() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios.get('/api/reviews/response-quality-over-time')
+      .then(res => {
+        if (Array.isArray(res.data)) {
+          setData(res.data);
+        } else {
+          console.error('Unexpected response format:', res.data);
+          setData([]);
+        }
+      })
+      .catch(err => console.error('Error fetching response quality:', err));
+  }, []);
+
+  return (
+    <LineChart width={600} height={300} data={data}>
+      <CartesianGrid stroke="#ccc" />
+      <XAxis dataKey="review_date" />
+      <YAxis />
+      <Tooltip />
+      <Line type="monotone" dataKey="avg_quality" stroke="#8884d8" />
+    </LineChart>
+  );
+}
+
+function ReviewsDashboard() {
+  const [reviews, setReviews] = useState([]);
+  const [filters, setFilters] = useState({ hotel_id: '', chain_id: '', from: '', to: '' });
+
+  useEffect(() => {
+    fetchReviews();
+  }, [filters]);
+
+  const fetchReviews = async () => {
+    try {
+      const params = {};
+      if (filters.hotel_id) params.hotel_id = filters.hotel_id;
+      if (filters.chain_id) params.chain_id = filters.chain_id;
+      if (filters.from) params.from = filters.from;
+      if (filters.to) params.to = filters.to;
+
+      const res = await axios.get('http://localhost:4000/api/reviews', { params });
+      setReviews(res.data);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+    }
+  };
+
+  const ratingCounts = Array.from({ length: 10 }, (_, i) => {
+    const rating = i + 1;
+    const count = reviews.filter(r => r.rating === rating).length;
+    return { rating: rating.toString(), count };
+  });
+
+  const answered = reviews.filter(r => r.hotel_response).length;
+  const unanswered = reviews.length - answered;
+  const responseData = [
+    { name: 'Answered', value: answered },
+    { name: 'Unanswered', value: unanswered }
+  ];
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-8 text-gray-800">📊 Reviews Dashboard</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <input type="number" name="hotel_id" placeholder="Hotel ID" onChange={handleFilterChange} className="p-2 border rounded" />
+        <input type="number" name="chain_id" placeholder="Chain ID" onChange={handleFilterChange} className="p-2 border rounded" />
+        <input type="date" name="from" onChange={handleFilterChange} className="p-2 border rounded" />
+        <input type="date" name="to" onChange={handleFilterChange} className="p-2 border rounded" />
+      </div>
+
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4 text-gray-700">Rating Distribution</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={ratingCounts}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="rating" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="count" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4 text-gray-700">AI Response Rate</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={responseData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                label
+              >
+                {responseData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                ))}
+              </Pie>
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </section>
+
+      {/* ✅ גרף חדש: איכות תגובות לאורך זמן */}
+      <section className="bg-white p-6 rounded-lg shadow mb-12">
+        <h2 className="text-xl font-semibold mb-4 text-gray-700">Response Quality Over Time</h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <ResponseQualityChart />
+        </ResponsiveContainer>
+      </section>
+
+      <h2 className="text-2xl font-semibold mb-4 text-gray-700">All Reviews</h2>
+      <ul className="space-y-6">
+        {reviews.map((rev) => (
+          <li key={rev.review_id} className="bg-white p-4 shadow rounded-lg border">
+            <p className="text-gray-800 font-semibold">👤 {rev.review_text}</p>
+            <p className="text-gray-600">⭐ Rating: {rev.rating}</p>
+            <p className="text-gray-500">🏨 Hotel: {rev.hotel_name} | 🏢 Chain: {rev.hotel_chain}</p>
+            <p className="mt-2"><strong>Hotel Response:</strong> {rev.hotel_response || 'No response'}</p>
+            <p><strong>Response Quality Score:</strong> {rev.response_quality_score !== null ? rev.response_quality_score : 'N/A'}</p>
+            <p className="text-sm text-gray-400">🕒 {new Date(rev.created_at).toLocaleDateString()}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default ReviewsDashboard;
+
+---
+File: eslint.config.js
+---
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+
+export default [
+  { ignores: ['dist'] },
+  {
+    files: ['**/*.{js,jsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  },
+]
+
+---
+File: grok.py
+---
+import os
+import argparse
+import tiktoken
+
+
+def generate_file_tree(root_dir):
+    tree = ""
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Exclude specified directories
+
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d
+            not in [
+                "node_modules",
+                ".next",
+                ".git",
+                ".venv",
+                ".vscode",
+                "__pycache__",
+                "blockchain_data",
+            ]
+        ]
+        # Calculate the relative path from root_dir to dirpath
+        relative_dir = os.path.relpath(dirpath, root_dir)
+        # Count the number of separators in the relative path to determine the level
+        level = 0 if relative_dir == "." else relative_dir.count(os.sep) + 1
+        indent = "    " * (level - 1)
+        dir_name = os.path.basename(dirpath)
+        tree += f"{indent}{dir_name}/\n"
+        for f in filenames:
+            tree += f"{indent}    {f}\n"
+    return tree
+
+
+def get_all_files(root_dir):
+    file_paths = []
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        # Exclude specified directories
+        dirnames[:] = [
+            d
+            for d in dirnames
+            if d
+            not in [
+                "node_modules",
+                ".next",
+                ".git",
+                "migrations",
+                "validations",
+                "package.json",
+                "logs",
+                "backups",
+                "public",
+            ]
+        ]
+        for f in filenames:
+            # Exclude specific file types
+            if f in [
+                "package-lock.json",
+                "yarn-error.log",
+                ".svg",
+                "package-lock.json",
+                "tsconfig.json",
+                ".prettierrc",
+                ".eslintrc.json",
+                "README.md",
+                "postcss.config.mjs",
+                "transactions_784017-784116.json",
+                "bitcoin_data.db",
+                "bitcoind.session.sql",
+                "cleanup.log",
+                ".python-version",
+                "bitcoinetl",
+                "README.txt",
+                "bitcoin_etl.log",
+                "blocks_784017-784116.json",
+            ]:
+                continue
+            full_path = os.path.join(dirpath, f)
+            file_paths.append(full_path)
+    return file_paths
+
+
+def read_files(file_paths, root_dir):
+    content = ""
+    MAX_FILE_SIZE = 10 * 1024 * 1024  # 10 MB limit
+    for i, file_path in enumerate(file_paths):
+        relative_path = os.path.relpath(file_path, root_dir)
+        print(f"Reading file {i+1}/{len(file_paths)}: {relative_path}")
+        content += f"\n---\nFile: {relative_path}\n---\n"
+        try:
+            # Skip large files
+            if os.path.getsize(file_path) > MAX_FILE_SIZE:
+                content += "<File skipped: Too large>\n"
+                continue
+            with open(file_path, "r", encoding="utf-8") as file:
+                content += file.read()
+        except UnicodeDecodeError:
+            content += "<File skipped: Invalid UTF-8 encoding>\n"
+        except Exception as e:
+            content += f"<Could not read file: {e}>\n"
+    return content
+
+
+def count_tokens(text):
+    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    tokens = encoding.encode(text, disallowed_special=())  # Disable special token check
+    return len(tokens)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Prepare folder contents for LLM prompt."
+    )
+    parser.add_argument("directory", help="The root directory of your code files.")
+    parser.add_argument(
+        "-o",
+        "--output",
+        help="The output TXT file to save the concatenated content. Defaults to 'backend.txt' or 'frontend.txt'.",
+        default=None,
+    )
+    args = parser.parse_args()
+
+    root_dir = os.path.abspath(args.directory)
+
+    # Set output filename based on the directory name (backend or frontend)
+    if args.output is None:
+        # Default to using directory name as output file
+        directory_name = os.path.basename(root_dir)
+        output_filename = f"{directory_name}.txt"
+    else:
+        output_filename = args.output
+
+    # Generate file tree
+    print("Generating file tree...")
+    file_tree = generate_file_tree(root_dir)
+
+    # Get all file paths
+    print("Collecting file paths...")
+    file_paths = get_all_files(root_dir)
+
+    # Read all files and get their content
+    print("Reading files...")
+    files_content = read_files(file_paths, root_dir)
+
+    # Combine file tree and files content
+    total_output = f"File Tree:\n\n{file_tree}\nFiles Content:\n{files_content}"
+
+    # Count tokens
+    print("Counting tokens...")
+    token_count = count_tokens(total_output)
+
+    # Save the concatenated content to a TXT file
+    print(f"Saving to {output_filename}...")
+    with open(output_filename, "w", encoding="utf-8") as output_file:
+        output_file.write(total_output)
+
+    # Print the total token count
+    print(f"Total Tokens: {token_count}")
+    print(f"All content has been saved to {output_filename}")
+
+
+if __name__ == "__main__":
+    main()
+
+---
+File: index.html
+---
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HoteAI Dashboard</title>
+
+  <!-- ✅ זה הלינק שצריך להופיע כאן -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>
+---
+File: package.json
+---
+{
+  "name": "client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.15.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@tailwindcss/postcss": "^4.1.4",
+    "@tailwindcss/typography": "^0.5.16",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.22.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.3",
+    "vite": "^6.3.1"
+  }
+}
+
+---
+File: postcss.config.js
+---
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+
+---
+File: tailwind.config.js
+---
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html", 
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
+}
+---
+File: vite.config.js
+---
+// client/vite.config.js
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    proxy: {
+      '/api': 'http://localhost:4000'
+    }
+  }
+});
+
+---
+File: src\App.css
+---
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+---
+File: src\App.jsx
+---
+// my-hotai-project/client/src/App.jsx
+import ReviewsDashboard from './components/ReviewsDashboard';
+
+function App() {
+  return (
+    <div className="font-sans">
+      <ReviewsDashboard />
+    </div>
+  );
+}
+export default App;
+
+---
+File: src\index.css
+---
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply font-sans;
+}
+---
+File: src\main.jsx
+---
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import './index.css' 
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
+
+---
+File: src\assets\react.svg
+---
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+---
+File: src\components\ReviewsDashboard.jsx
+---
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line
+} from 'recharts'; // ✅ הוספתי LineChart ו־Line
+
+const COLORS = ['#00C49F', '#FF8042'];
+
+function ResponseQualityChart() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios.get('/api/reviews/response-quality-over-time')
+      .then(res => {
+        if (Array.isArray(res.data)) {
+          setData(res.data);
+        } else {
+          console.error('Unexpected response format:', res.data);
+          setData([]);
+        }
+      })
+      .catch(err => console.error('Error fetching response quality:', err));
+  }, []);
+
+  return (
+    <LineChart width={600} height={300} data={data}>
+      <CartesianGrid stroke="#ccc" />
+      <XAxis dataKey="review_date" />
+      <YAxis />
+      <Tooltip />
+      <Line type="monotone" dataKey="avg_quality" stroke="#8884d8" />
+    </LineChart>
+  );
+}
+
+function ReviewsDashboard() {
+  const [reviews, setReviews] = useState([]);
+  const [filters, setFilters] = useState({ hotel_id: '', chain_id: '', from: '', to: '' });
+
+  useEffect(() => {
+    fetchReviews();
+  }, [filters]);
+
+  const fetchReviews = async () => {
+    try {
+      const params = {};
+      if (filters.hotel_id) params.hotel_id = filters.hotel_id;
+      if (filters.chain_id) params.chain_id = filters.chain_id;
+      if (filters.from) params.from = filters.from;
+      if (filters.to) params.to = filters.to;
+
+      const res = await axios.get('http://localhost:4000/api/reviews', { params });
+      setReviews(res.data);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+    }
+  };
+
+  const ratingCounts = Array.from({ length: 10 }, (_, i) => {
+    const rating = i + 1;
+    const count = reviews.filter(r => r.rating === rating).length;
+    return { rating: rating.toString(), count };
+  });
+
+  const answered = reviews.filter(r => r.hotel_response).length;
+  const unanswered = reviews.length - answered;
+  const responseData = [
+    { name: 'Answered', value: answered },
+    { name: 'Unanswered', value: unanswered }
+  ];
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-8 text-gray-800">📊 Reviews Dashboard</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <input type="number" name="hotel_id" placeholder="Hotel ID" onChange={handleFilterChange} className="p-2 border rounded" />
+        <input type="number" name="chain_id" placeholder="Chain ID" onChange={handleFilterChange} className="p-2 border rounded" />
+        <input type="date" name="from" onChange={handleFilterChange} className="p-2 border rounded" />
+        <input type="date" name="to" onChange={handleFilterChange} className="p-2 border rounded" />
+      </div>
+
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4 text-gray-700">Rating Distribution</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={ratingCounts}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="rating" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="count" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-xl font-semibold mb-4 text-gray-700">AI Response Rate</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={responseData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                label
+              >
+                {responseData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                ))}
+              </Pie>
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </section>
+
+      {/* ✅ גרף חדש: איכות תגובות לאורך זמן */}
+      <section className="bg-white p-6 rounded-lg shadow mb-12">
+        <h2 className="text-xl font-semibold mb-4 text-gray-700">Response Quality Over Time</h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <ResponseQualityChart />
+        </ResponsiveContainer>
+      </section>
+
+      <h2 className="text-2xl font-semibold mb-4 text-gray-700">All Reviews</h2>
+      <ul className="space-y-6">
+        {reviews.map((rev) => (
+          <li key={rev.review_id} className="bg-white p-4 shadow rounded-lg border">
+            <p className="text-gray-800 font-semibold">👤 {rev.review_text}</p>
+            <p className="text-gray-600">⭐ Rating: {rev.rating}</p>
+            <p className="text-gray-500">🏨 Hotel: {rev.hotel_name} | 🏢 Chain: {rev.hotel_chain}</p>
+            <p className="mt-2"><strong>Hotel Response:</strong> {rev.hotel_response || 'No response'}</p>
+            <p><strong>Response Quality Score:</strong> {rev.response_quality_score !== null ? rev.response_quality_score : 'N/A'}</p>
+            <p className="text-sm text-gray-400">🕒 {new Date(rev.created_at).toLocaleDateString()}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default ReviewsDashboard;
