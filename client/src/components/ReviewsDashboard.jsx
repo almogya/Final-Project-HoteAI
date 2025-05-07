@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line
-} from 'recharts'; // ✅ הוספתי LineChart ו־Line
+} from 'recharts';
 
 const COLORS = ['#00C49F', '#FF8042'];
 
@@ -12,14 +12,7 @@ function ResponseQualityChart() {
 
   useEffect(() => {
     axios.get('/api/reviews/response-quality-over-time')
-      .then(res => {
-        if (Array.isArray(res.data)) {
-          setData(res.data);
-        } else {
-          console.error('Unexpected response format:', res.data);
-          setData([]);
-        }
-      })
+      .then(res => setData(Array.isArray(res.data) ? res.data : []))
       .catch(err => console.error('Error fetching response quality:', err));
   }, []);
 
@@ -38,9 +31,7 @@ function ReviewsDashboard() {
   const [reviews, setReviews] = useState([]);
   const [filters, setFilters] = useState({ hotel_id: '', chain_id: '', from: '', to: '' });
 
-  useEffect(() => {
-    fetchReviews();
-  }, [filters]);
+  useEffect(() => { fetchReviews(); }, [filters]);
 
   const fetchReviews = async () => {
     try {
@@ -50,30 +41,34 @@ function ReviewsDashboard() {
       if (filters.from) params.from = filters.from;
       if (filters.to) params.to = filters.to;
 
-      const res = await axios.get('http://localhost:4000/api/reviews', { params });
-      setReviews(res.data);
+      const { data } = await axios.get('http://localhost:4000/api/reviews', { params });
+
+      // שומרים רק ביקורות עם ציון גדול מ-0
+      const filtered = data.filter(r => r.calculate_score && r.calculate_score > 0);
+      setReviews(filtered);
     } catch (error) {
       console.error('Error fetching reviews:', error);
     }
   };
 
+  /* ─────────────── Dashboards helpers ─────────────── */
+
   const ratingCounts = Array.from({ length: 10 }, (_, i) => {
     const rating = i + 1;
-    const count = reviews.filter(r => r.rating === rating).length;
-    return { rating: rating.toString(), count };
+    return { rating: rating.toString(), count: reviews.filter(r => r.rating === rating).length };
   });
 
-  const answered = reviews.filter(r => r.hotel_response).length;
-  const unanswered = reviews.length - answered;
+  const answered = reviews.length;           // יש ציון ⇒ נענו
+  const unanswered = 0;                      // מסננים רק עם ציון, אז אין שלא נענו
   const responseData = [
     { name: 'Answered', value: answered },
     { name: 'Unanswered', value: unanswered }
   ];
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
+  const handleFilterChange = ({ target: { name, value } }) =>
     setFilters(prev => ({ ...prev, [name]: value }));
-  };
+
+  /* ───────────────────────── UI ────────────────────── */
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -82,10 +77,11 @@ function ReviewsDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <input type="number" name="hotel_id" placeholder="Hotel ID" onChange={handleFilterChange} className="p-2 border rounded" />
         <input type="number" name="chain_id" placeholder="Chain ID" onChange={handleFilterChange} className="p-2 border rounded" />
-        <input type="date" name="from" onChange={handleFilterChange} className="p-2 border rounded" />
-        <input type="date" name="to" onChange={handleFilterChange} className="p-2 border rounded" />
+        <input type="date"   name="from"     onChange={handleFilterChange} className="p-2 border rounded" />
+        <input type="date"   name="to"       onChange={handleFilterChange} className="p-2 border rounded" />
       </div>
 
+      {/* Rating distribution + response rate */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-4 text-gray-700">Rating Distribution</h2>
@@ -123,7 +119,7 @@ function ReviewsDashboard() {
         </div>
       </section>
 
-      {/* ✅ גרף חדש: איכות תגובות לאורך זמן */}
+      {/* Response quality over time */}
       <section className="bg-white p-6 rounded-lg shadow mb-12">
         <h2 className="text-xl font-semibold mb-4 text-gray-700">Response Quality Over Time</h2>
         <ResponsiveContainer width="100%" height={300}>
@@ -131,15 +127,16 @@ function ReviewsDashboard() {
         </ResponsiveContainer>
       </section>
 
+      {/* All reviews list */}
       <h2 className="text-2xl font-semibold mb-4 text-gray-700">All Reviews</h2>
       <ul className="space-y-6">
-        {reviews.map((rev) => (
+        {reviews.map(rev => (
           <li key={rev.review_id} className="bg-white p-4 shadow rounded-lg border">
             <p className="text-gray-800 font-semibold">👤 {rev.review_text}</p>
             <p className="text-gray-600">⭐ Rating: {rev.rating}</p>
             <p className="text-gray-500">🏨 Hotel: {rev.hotel_name} | 🏢 Chain: {rev.hotel_chain}</p>
-            <p className="mt-2"><strong>Hotel Response:</strong> {rev.hotel_response || 'No response'}</p>
-            <p><strong>Response Quality Score:</strong> {rev.response_quality_score !== null ? rev.response_quality_score : 'N/A'}</p>
+            <p className="mt-2"><strong>Hotel Response:</strong> {rev.hotel_response}</p>
+            <p><strong>Response Quality Score:</strong> {Math.round(rev.calculate_score)}</p>
             <p className="text-sm text-gray-400">🕒 {new Date(rev.created_at).toLocaleDateString()}</p>
           </li>
         ))}

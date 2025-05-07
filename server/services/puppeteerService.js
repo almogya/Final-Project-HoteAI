@@ -1,8 +1,11 @@
-// services/puppeteerService.js
 const fs = require("fs");
 const cheerio = require("cheerio");
 const { parse, format, isValid } = require('date-fns');
 const { he } = require('date-fns/locale');
+
+function isHebrew(text) {
+  return /[֐-׿]/.test(text);
+}
 
 async function scrapeBookingWithPuppeteer(url) {
   try {
@@ -10,7 +13,6 @@ async function scrapeBookingWithPuppeteer(url) {
     const html = fs.readFileSync("page.html", "utf-8");
     const $ = cheerio.load(html);
 
-    // Extract hotel name from pagename parameter
     let hotel_name = "Unknown";
     const paginationLink = $("a.pagenext").attr("href");
     if (paginationLink) {
@@ -25,8 +27,11 @@ async function scrapeBookingWithPuppeteer(url) {
       console.warn("⚠️ No pagination link found with class .pagenext");
     }
 
-    const reviewBlocks = $("li.review_list_new_item_block");
+    const reviewBlocks = $("div.c-review-block");
     console.log("🔍 Found review blocks:", reviewBlocks.length);
+    if (reviewBlocks.length === 0) {
+      console.warn("🚫 No review blocks found! Check selector or HTML structure.");
+    }
 
     const reviews = reviewBlocks.map((i, node) => {
       const getText = (selector) => {
@@ -43,25 +48,17 @@ async function scrapeBookingWithPuppeteer(url) {
       const getNumber = (selector) => {
         const text = getText(selector);
         const num = parseFloat(text);
-        return isNaN(num) ? null : num;
+        return isNaN(num) ? null : Math.round(num);
       };
 
-      // Extract fields
-      const guest_name = getText(".bui-avatar-block__title") || "Unknown";
-      const country = getText(".bui-avatar-block__subtitle") || "";
+      const reviewer_name = getText(".bui-avatar-block__title") || "Unknown";
+      const reviewer_country = getText(".bui-avatar-block__subtitle") || "";
       const rating = getNumber(".bui-review-score__badge");
-      const headline = getText(".c-review-block__title") || "";
+      const review_headline = getText(".c-review-block__title") || "";
+      const review_text = getText(".c-review__body") || getText(".review-content") || getText("[data-testid='review-text']") || "";
 
-      // Review content
-      const review_text =
-        getText(".c-review__body") ||
-        getText(".review-content") ||
-        getText("[data-testid='review-text']") ||
-        "No review text provided";
-
-      // Split review_text into positive and negative
       const splitReview = (text, rating) => {
-        if (text === "No review text provided") {
+        if (text === "" || text === "No review text provided") {
           return { positive: "", negative: "" };
         }
         const normalizedText = text.replace(/\s+/g, ' ').trim();
@@ -81,10 +78,8 @@ async function scrapeBookingWithPuppeteer(url) {
 
         sentences.forEach((sentence) => {
           if (!sentence) return;
-          // Check for negative markers or words
           const isNegative = negativeMarkers.some(marker => sentence.includes(marker)) ||
             negativeWords.some(word => sentence.includes(word)) ||
-            // Low rating increases likelihood of negative sentiment
             (rating && rating <= 6 && sentence.includes("לא"));
           if (isNegative) {
             negative.push(sentence);
@@ -93,7 +88,6 @@ async function scrapeBookingWithPuppeteer(url) {
           }
         });
 
-        // If rating is low (<=6) and positive is populated but negative is empty, move content to negative
         if (rating && rating <= 6 && positive.length > 0 && negative.length === 0) {
           negative.push(...positive);
           positive = [];
@@ -105,22 +99,24 @@ async function scrapeBookingWithPuppeteer(url) {
         };
       };
 
-      const { positive: positive_review, negative: negative_review } = splitReview(review_text, rating);
+      const { positive: review_positive, negative: review_negative } = splitReview(review_text, rating);
 
-      // Hotel response
-      const hotel_response =
-        getText(".c-review-block__response__body") ||
-        getText(".c-review__response") ||
-        getText(".hp--review-response__body") ||
-        getText(".review-response__content") ||
-        getText(".bui-card__content--response") ||
-        getText("[data-testid='review-response']") ||
-        getText(".review-block__response") ||
-        null;
+      const hotel_response_content = (() => {
+        const responseCandidates = $(node).find(".c-review-block__response__body");
+        if (responseCandidates.length === 0) return null;
+        const bestResponse = responseCandidates
+          .map((i, el) => $(el).text().trim())
+          .get()
+          .filter(Boolean)
+          .sort((a, b) => b.length - a.length)[0];
+        return bestResponse || null;
+      })();
 
-      // Date parsing
+      console.log(`📢 Review ${i} hotel response:`, hotel_response_content);
+      console.log(`🗣️ Review ${i} text:`, review_text);
+
       let dateText = getText(".c-review-block__date");
-      let date;
+      let created_at;
       if (dateText) {
         const match = dateText.match(/(\d+\s+[א-ת]+\s+\d{4})/);
         if (match && match[1]) {
@@ -128,75 +124,38 @@ async function scrapeBookingWithPuppeteer(url) {
             const cleanDateText = match[1].replace(/\s+ב([א-ת]+)/, ' $1');
             const parsedDate = parse(cleanDateText, 'd MMMM yyyy', new Date(), { locale: he });
             if (isValid(parsedDate)) {
-              date = format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss'Z'");
+              created_at = format(parsedDate, "yyyy-MM-dd'T'HH:mm:ss");
             } else {
-              console.warn(`Invalid parsed date for "${cleanDateText}"`);
-              date = new Date().toISOString();
+              created_at = new Date().toISOString();
             }
-          } catch (err) {
-            console.warn(`Failed to parse date "${match[1]}":`, err.message);
-            date = new Date().toISOString();
+          } catch {
+            created_at = new Date().toISOString();
           }
         } else {
-          console.warn(`No valid date found in "${dateText}"`);
-          date = new Date().toISOString();
+          created_at = new Date().toISOString();
         }
       } else {
-        console.warn("No date text found");
-        date = new Date().toISOString();
+        created_at = new Date().toISOString();
       }
 
-      // Additional fields
-      const is_genius = getText(".bui-badge--genius") ? true : false;
-      const reservation_id = getText("[data-reservation-id]") || null;
-      const reply_last_modified =
-        getText(".c-review-block__response__date") ||
-        getText(".hp--review-response__date") ||
-        getText(".review-response__date") ||
-        getText(".c-review-block__response__date") ||
-        null;
-      const sentiment_score = null; // Requires external analysis
-      const response_quality_score = null; // Requires external analysis
-
-      // Log raw review data and HTML
-      const rawHtml = $(node).html();
-      console.log(`Review ${i}:`, {
-        guest_name,
-        country,
-        rating,
-        headline,
-        positive_review,
-        negative_review,
-        review_text,
-        hotel_response,
-        date,
-        is_genius,
-        reservation_id,
-        reply_last_modified,
-        hotel_name
-      });
-      console.log(`Raw HTML for Review ${i}:`, rawHtml.slice(0, 500) + (rawHtml.length > 500 ? '...' : ''));
+      const review_lang = isHebrew(review_text) ? 'he' : 'en';
 
       return {
-        date,
-        guest_name,
-        country,
-        reviewer_rate: rating,
-        headline,
-        positive_review,
-        negative_review,
-        response_content: hotel_response,
+        created_at,
+        reviewer_name,
+        reviewer_country,
+        rating,
+        review_headline,
+        review_positive,
+        review_negative,
+        hotel_response_content,
         hotel_name,
         source_id: 1,
-        review_text,
-        is_genius,
-        reservation_id,
-        reply_last_modified,
-        sentiment_score,
-        response_quality_score
+        review_lang
       };
     }).get();
 
+    console.log("🧾 Final extracted reviews:", reviews);
     return reviews;
   } catch (err) {
     console.error("❌ Local HTML parsing failed:", err);

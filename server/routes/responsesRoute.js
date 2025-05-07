@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
 
     try {
         const { rows } = await pool.query(
-            'SELECT * FROM reviews WHERE id = $1',
+            'SELECT * FROM guest_reviews WHERE review_id = $1',
             [reviewId]
         );
         const review = rows[0];
@@ -36,7 +36,7 @@ router.post('/', async (req, res) => {
 
         // Save to DB
         await pool.query(
-            'UPDATE reviews SET response_text = $1 WHERE id = $2',
+            'UPDATE guest_reviews SET hotel_response_content = $1 WHERE review_id = $2',
             [aiReply, reviewId]
         );
 

@@ -1,4 +1,55 @@
-server/.env
-server/server_output.txt
-client/client_output.txt
-server/page.html
+# --------------  Node / JS  --------------
+node_modules/
+dist/
+dist-ssr/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# --------------  Environment  --------------
+.env*
+!.env.example        # כן להכליל קובץ דוגמה ריק
+
+# --------------  Build artefacts  --------------
+*.tsbuildinfo
+*.tgz
+*.zip
+*.gz
+
+# --------------  Logs & outputs  --------------
+logs/
+*.log
+*output.txt          # client_output.txt, server_output.txt
+system.log
+chatgpt-errors.log
+analyze-failures.log
+
+# --------------  Runtime data / screenshots  --------------
+page.html
+screenshot*.png
+*.sqlite
+*.db
+*.sql
+
+# --------------  Tests --------------
+/test*/              # test_scrape.js ודומים
+
+# --------------  OS / Editor garbage  --------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# --------------  Python helpers --------------
+__pycache__/
+*.py[cod]
+*.pyo
+
+# --------------  Misc --------------
+# קבצי export גדולים של Puppeteer, raw HTML, וכד'
+*.har
+*.mhtml
