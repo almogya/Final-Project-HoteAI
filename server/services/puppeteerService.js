@@ -7,10 +7,10 @@ function isHebrew(text) {
   return /[֐-׿]/.test(text);
 }
 
-async function scrapeBookingWithPuppeteer(url) {
+async function scrapeBookingWithPuppeteer(url, pagePath = "page.html") {
   try {
-    console.log("📄 Loading page.html locally...");
-    const html = fs.readFileSync("page.html", "utf-8");
+    console.log(`📄 Loading ${pagePath} locally...`);
+    const html = fs.readFileSync(pagePath, "utf-8");
     const $ = cheerio.load(html);
 
     let hotel_name = "Unknown";

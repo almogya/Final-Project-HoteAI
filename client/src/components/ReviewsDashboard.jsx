@@ -42,6 +42,7 @@ function ReviewsDashboard() {
       if (filters.to) params.to = filters.to;
 
       const { data } = await axios.get('http://localhost:4000/api/reviews', { params });
+      console.log('Fetched reviews:', data); // Log to verify review_id is included
 
       // שומרים רק ביקורות עם ציון גדול מ-0
       const filtered = data.filter(r => r.calculate_score && r.calculate_score > 0);
@@ -138,6 +139,7 @@ function ReviewsDashboard() {
             <p className="mt-2"><strong>Hotel Response:</strong> {rev.hotel_response}</p>
             <p><strong>Response Quality Score:</strong> {Math.round(rev.calculate_score)}</p>
             <p className="text-sm text-gray-400">🕒 {new Date(rev.created_at).toLocaleDateString()}</p>
+            <p className="text-sm text-gray-400">📋 Review ID: {rev.review_id}</p>
           </li>
         ))}
       </ul>

@@ -40,8 +40,7 @@ async function analyzeUnscoredResponses() {
         .join('\n');
 
       const prompt = `
-You are an AI tasked with evaluating hotel responses. The guest wrote a review in ${review_lang === 'he' ? 'Hebrew' : 'English'
-        }:
+You are an AI tasked with evaluating hotel responses. The guest wrote a review in ${review_lang === 'he' ? 'Hebrew' : 'English'}:
 """
 ${review_content}
 """
@@ -81,11 +80,38 @@ Evaluate the hotel response and return ONLY a JSON object:
 
         let scores;
         let calculateScore = null;
+        let totalCriteria = 12; // Default to 12 criteria
 
         try {
           scores = JSON.parse(content);
-          const positives = Object.values(scores).filter(Boolean).length;
-          calculateScore = (positives / Object.keys(scores).length) * 100;
+          // Determine which criteria to exclude based on feedback
+          const excludePositive = !review_positive || review_positive.trim() === '';
+          const excludeNegative = !review_negative || review_negative.trim() === '';
+
+          // Filter out irrelevant criteria
+          const relevantScores = {};
+          if (!excludePositive) relevantScores.is_answered_positive = scores.is_answered_positive;
+          if (!excludeNegative) relevantScores.is_answered_negative = scores.is_answered_negative;
+          relevantScores.is_response = scores.is_response;
+          relevantScores.is_right_lang = scores.is_right_lang;
+          relevantScores.is_include_guest_name = scores.is_include_guest_name;
+          relevantScores.is_include_hotelier_name = scores.is_include_hotelier_name;
+          relevantScores.is_kind = scores.is_kind;
+          relevantScores.is_concise = scores.is_concise;
+          relevantScores.is_gratitude = scores.is_gratitude;
+          relevantScores.is_include_come_back_asking = scores.is_include_come_back_asking;
+          relevantScores.is_syntax_right = scores.is_syntax_right;
+          relevantScores.is_personal_tone_not_generic = scores.is_personal_tone_not_generic;
+
+          // Count true values and total relevant criteria
+          const positives = Object.values(relevantScores).filter(Boolean).length;
+          totalCriteria = Object.keys(relevantScores).length;
+
+          calculateScore = totalCriteria > 0 ? (positives / totalCriteria) * 100 : 0;
+
+          console.log(
+            `✔️ review ${review_id} scored ${calculateScore.toFixed(2)}% (out of ${totalCriteria} criteria)`
+          );
         } catch (e) {
           console.error(`JSON parse error for review ${review_id}:`, e.message);
           console.error('Received:', content);
@@ -94,38 +120,38 @@ Evaluate the hotel response and return ONLY a JSON object:
 
         await pool.query(
           `
-        INSERT INTO insights (
-          review_id,
-          is_response,
-          is_right_lang,
-          is_answered_positive,
-          is_answered_negative,
-          is_include_guest_name,
-          is_include_hotelier_name,
-          is_kind,
-          is_concise,
-          is_gratitude,
-          is_include_come_back_asking,
-          is_syntax_right,
-          is_personal_tone_not_generic,
-          calculate_score
-        )
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
-        ON CONFLICT (review_id) DO UPDATE SET
-          is_response                 = EXCLUDED.is_response,
-          is_right_lang               = EXCLUDED.is_right_lang,
-          is_answered_positive        = EXCLUDED.is_answered_positive,
-          is_answered_negative        = EXCLUDED.is_answered_negative,
-          is_include_guest_name       = EXCLUDED.is_include_guest_name,
-          is_include_hotelier_name    = EXCLUDED.is_include_hotelier_name,
-          is_kind                     = EXCLUDED.is_kind,
-          is_concise                  = EXCLUDED.is_concise,
-          is_gratitude                = EXCLUDED.is_gratitude,
-          is_include_come_back_asking = EXCLUDED.is_include_come_back_asking,
-          is_syntax_right             = EXCLUDED.is_syntax_right,
-          is_personal_tone_not_generic= EXCLUDED.is_personal_tone_not_generic,
-          calculate_score             = EXCLUDED.calculate_score
-        `,
+          INSERT INTO insights (
+            review_id,
+            is_response,
+            is_right_lang,
+            is_answered_positive,
+            is_answered_negative,
+            is_include_guest_name,
+            is_include_hotelier_name,
+            is_kind,
+            is_concise,
+            is_gratitude,
+            is_include_come_back_asking,
+            is_syntax_right,
+            is_personal_tone_not_generic,
+            calculate_score
+          )
+          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)
+          ON CONFLICT (review_id) DO UPDATE SET
+            is_response                 = EXCLUDED.is_response,
+            is_right_lang               = EXCLUDED.is_right_lang,
+            is_answered_positive        = EXCLUDED.is_answered_positive,
+            is_answered_negative        = EXCLUDED.is_answered_negative,
+            is_include_guest_name       = EXCLUDED.is_include_guest_name,
+            is_include_hotelier_name    = EXCLUDED.is_include_hotelier_name,
+            is_kind                     = EXCLUDED.is_kind,
+            is_concise                  = EXCLUDED.is_concise,
+            is_gratitude                = EXCLUDED.is_gratitude,
+            is_include_come_back_asking = EXCLUDED.is_include_come_back_asking,
+            is_syntax_right             = EXCLUDED.is_syntax_right,
+            is_personal_tone_not_generic= EXCLUDED.is_personal_tone_not_generic,
+            calculate_score             = EXCLUDED.calculate_score
+          `,
           [
             review_id,
             scores.is_response,
@@ -142,10 +168,6 @@ Evaluate the hotel response and return ONLY a JSON object:
             scores.is_personal_tone_not_generic,
             calculateScore
           ]
-        );
-
-        console.log(
-          `✔️ review ${review_id} scored ${calculateScore.toFixed(2)}%`
         );
       } catch (err) {
         console.error(`🔥 review ${review_id} failed:`, err.message);

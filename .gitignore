@@ -29,6 +29,7 @@ analyze-failures.log
 
 # --------------  Runtime data / screenshots  --------------
 page.html
+page-*.html
 screenshot*.png
 *.sqlite
 *.db
