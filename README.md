@@ -18,7 +18,7 @@
 - **Backend**: Express (Node.js)
 - **Frontend**: React
 - **Database**: PostgreSQL (עם pgAdmin)
-- **AI Integration**: OpenAI ChatGPT API (`gpt-3.5-turbo`)
+- **AI Integration**: OpenAI ChatGPT API (`gpt-4o-mini`)
 - **Scheduler**: Cron + Node for auto-analysis
 - **Web Scraping**: Simulated with dummy Booking API structure
 
