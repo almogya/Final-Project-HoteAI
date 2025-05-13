@@ -54,14 +54,14 @@ my-hoteai-project/
 
 1. **התקנת תלויות**
 ```bash
-npm install
+cd server && npm install
 cd client && npm install
 ```
 
 2. **הרצת השרת**
 ```bash
 cd server
-node index.js
+npm start
 ```
 
 3. **הרצת הקליינט**
